@@ -155,13 +155,14 @@
   }
 
   /* ——— звук: нажал на кадр — включился ——— */
-  .snd{position:absolute;right:9px;bottom:8px;z-index:3;display:inline-flex;align-items:center;gap:5px;
-    background:rgba(252,246,247,.88);color:var(--ink);padding:4px 8px;cursor:pointer;
+  /* метка звука держится подальше от кнопки Inquiries в правом нижнем углу */
+  .snd{position:absolute;right:9px;top:9px;z-index:3;display:inline-flex;align-items:center;gap:5px;
+    background:rgba(252,246,247,.88);color:var(--ink);padding:5px 9px;cursor:pointer;
     font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;font-weight:500;
     transition:background-color .18s linear,color .18s linear,opacity .25s linear;}
   .snd:hover{background:var(--paper);}
   .sounding .snd{background:var(--mark);color:#fff;}
-  .reel .snd{right:var(--g);bottom:calc(var(--g) - 4px);}
+  .reel .snd{right:auto;top:auto;left:var(--g);bottom:calc(var(--g) - 4px);}
   .say{display:flex;align-items:center;min-height:clamp(300px,42vw,560px);padding-inline:var(--g);}
   .say h2{font-size:clamp(1.6rem,3.6vw,2.8rem);}
 
@@ -249,7 +250,7 @@
 </section>
 
 <div class="row r-video-text" id="work">
-  <a class="shot r169" data-v="a/nika.mp4" href="#work">
+  <a class="shot r169" data-v="a/nika.mp4" data-snd href="#work">
     <img src="a/nika-bw.jpg" alt="Mousson Atelier × NIKA">
     <video src="a/nika.mp4" muted loop playsinline preload="none"></video>
     <span class="tag mono">01</span>
@@ -271,7 +272,7 @@
   <div class="tblock square plain">
     <h2 class="disp">Make the<br>impossible<br>possible</h2>
   </div>
-  <a class="shot r45" data-v="a/italy.mp4" href="#work">
+  <a class="shot r45" data-v="a/italy.mp4" data-snd href="#work">
     <img src="a/italy-bw.jpg" alt="Mousson Atelier — Summer 2026">
     <video src="a/italy.mp4" muted loop playsinline preload="none"></video>
     <span class="tag mono">02</span>
@@ -281,14 +282,14 @@
 <div class="air-m"></div>
 
 <div class="row r-three">
-  <a class="shot r916" data-v="a/office.mp4" href="#work"><img src="a/office-bw.jpg" alt=""><video src="a/office.mp4" muted loop playsinline preload="none"></video></a>
-  <a class="shot r916" data-v="a/safe.mp4" href="#work"><img src="a/safe-bw.jpg" alt=""><video src="a/safe.mp4" muted loop playsinline preload="none"></video></a>
-  <a class="shot r916" data-v="a/padenie.mp4" href="#work"><img src="a/padenie-bw.jpg" alt=""><video src="a/padenie.mp4" muted loop playsinline preload="none"></video></a>
+  <a class="shot r916" data-v="a/office.mp4" data-snd href="#work"><img src="a/office-bw.jpg" alt=""><video src="a/office.mp4" muted loop playsinline preload="none"></video></a>
+  <a class="shot r916" data-v="a/safe.mp4" data-snd href="#work"><img src="a/safe-bw.jpg" alt=""><video src="a/safe.mp4" muted loop playsinline preload="none"></video></a>
+  <a class="shot r916" data-v="a/padenie.mp4" data-snd href="#work"><img src="a/padenie-bw.jpg" alt=""><video src="a/padenie.mp4" muted loop playsinline preload="none"></video></a>
 </div>
 
 <div class="row r-three" style="margin-top:clamp(8px,1.2vw,16px);">
-  <a class="shot r916" data-v="a/primerka.mp4" href="#work"><img src="a/primerka-bw.jpg" alt=""><video src="a/primerka.mp4" muted loop playsinline preload="none"></video></a>
-  <a class="shot r916" data-v="a/tweed.mp4" href="#work"><img src="a/tweed-bw.jpg" alt=""><video src="a/tweed.mp4" muted loop playsinline preload="none"></video></a>
+  <a class="shot r916" data-v="a/primerka.mp4" data-snd href="#work"><img src="a/primerka-bw.jpg" alt=""><video src="a/primerka.mp4" muted loop playsinline preload="none"></video></a>
+  <a class="shot r916" data-v="a/tweed.mp4" data-snd href="#work"><img src="a/tweed-bw.jpg" alt=""><video src="a/tweed.mp4" muted loop playsinline preload="none"></video></a>
   <div></div>
 </div>
 
