@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Оплата — M’AI, поток 03 — MANAKAI</title>
+<meta name="description" content="Оплата участия в потоке 03 курса M’AI. Лена Манакай, manakai.art">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Lato:wght@300;400&display=swap">
+<link rel="stylesheet" href="style.css">
+<style>
+  .pay{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(26px,4vw,64px);
+    margin-top:clamp(30px,5vw,60px);align-items:start;}
+  @media (max-width:860px){ .pay{grid-template-columns:1fr;} }
+
+  .tariffs{display:flex;flex-direction:column;gap:12px;}
+  .tariff{border:1px solid var(--hair);background:var(--white);padding:clamp(16px,2.2vw,24px);
+    display:block;cursor:pointer;transition:border-color .18s linear,background-color .18s linear;}
+  .tariff:hover{border-color:var(--soft);}
+  .tariff input{position:absolute;opacity:0;pointer-events:none;}
+  .tariff.on{border-color:var(--mark);}
+  .tariff .row{display:flex;align-items:baseline;justify-content:space-between;gap:14px;}
+  .tariff .nm{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;}
+  .tariff .pr{font-family:var(--disp);font-weight:700;letter-spacing:-.03em;font-size:clamp(1.3rem,2.6vw,1.9rem);
+    font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .tariff .ds{font-family:var(--text);font-weight:300;font-size:14px;line-height:1.55;
+    color:var(--grey);margin-top:9px;max-width:46ch;}
+
+  .facts{border-top:1px solid var(--hair);margin-top:clamp(26px,4vw,46px);}
+  .facts div{display:grid;grid-template-columns:minmax(120px,32%) 1fr;gap:10px 18px;
+    padding:11px 0;border-bottom:1px solid var(--hair);}
+  .facts dt,.facts span.k{font-family:var(--mono);font-size:10px;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--grey);}
+  .facts span.v{font-family:var(--text);font-weight:300;font-size:14.5px;line-height:1.5;}
+
+  form{background:var(--white);border:1px solid var(--hair);padding:clamp(18px,2.4vw,28px);
+    position:sticky;top:76px;}
+  form label.fl{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--grey);margin-top:16px;}
+  form label.fl:first-of-type{margin-top:0;}
+  form input[type=text],form input[type=email],form input[type=tel]{
+    width:100%;margin-top:7px;padding:10px 11px;border:1px solid var(--hair);background:var(--paper);
+    font-family:var(--mono);font-size:13px;color:var(--ink);}
+  form input:focus{outline:none;border-color:var(--mark);}
+  .agree{display:flex;gap:9px;align-items:flex-start;margin-top:17px;}
+  .agree input{margin:2px 0 0;accent-color:var(--mark);width:15px;height:15px;flex:none;}
+  .agree span{font-family:var(--text);font-weight:300;font-size:12.5px;line-height:1.5;color:var(--grey);}
+  .agree a{color:var(--ink);text-decoration:underline;text-underline-offset:2px;}
+  .total{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+    margin-top:22px;padding-top:15px;border-top:1px solid var(--hair);}
+  .total .k{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--grey);}
+  .total .v{font-family:var(--disp);font-weight:700;letter-spacing:-.03em;font-size:1.5rem;font-variant-numeric:tabular-nums;}
+  button.go{width:100%;margin-top:16px;padding:14px;border:0;cursor:pointer;background:var(--mark);color:#fff;
+    font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;
+    transition:transform .12s ease-out;}
+  button.go:active{transform:scale(.99);}
+  button.go[disabled]{background:var(--soft);color:var(--ink);cursor:not-allowed;}
+  .after{font-family:var(--text);font-weight:300;font-size:12px;line-height:1.5;color:var(--grey);margin-top:12px;}
+  .ph{display:inline-block;border:1px solid var(--mark);color:var(--mark);padding:1px 6px;
+    font-family:var(--mono);font-size:10px;letter-spacing:.08em;}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="line mono">
+    <a href="index.html">MANAKAI</a><span class="sl">/</span><a href="index.html#work">Work</a><span class="sl">/</span><a href="about.html">About</a><span class="sl">/</span><a href="index.html#contact">Contact</a>
+  </nav>
+  <span class="sp"></span>
+  <a class="school" href="school.html" aria-label="M’AI School">
+    <span class="mk"></span><span class="lb mono">School</span>
+  </a>
+</header>
+
+<main>
+  <span class="kicker">M’AI · поток 03 · оплата участия</span>
+  <h1 class="disp">Оплата<br>участия</h1>
+
+  <div class="pay">
+    <div>
+      <div class="tariffs">
+        <label class="tariff on">
+          <input type="radio" name="tariff" value="standard" data-price="77000" checked>
+          <span class="row"><span class="nm">Standard</span><span class="pr">77 000 ₽</span></span>
+          <span class="ds">Состав пакета — в программе</span>
+        </label>
+        <label class="tariff">
+          <input type="radio" name="tariff" value="vip" data-price="113000">
+          <span class="row"><span class="nm">VIP</span><span class="pr">113 000 ₽</span></span>
+          <span class="ds">Состав пакета — в программе</span>
+        </label>
+      </div>
+
+      <dl class="facts">
+        <div><dt>Услуга</dt><span class="v">Участие в онлайн-курсе M’AI (AI с Манакай), поток 03</span></div>
+        <div><dt>Исполнитель</dt><span class="v">ИП Сарапульцева Елена Борисовна</span></div>
+        <div><dt>Старт</dt><span class="v">Осень 2026</span></div>
+        <div><dt>Формат</dt><span class="v">Онлайн, группа до 10 человек, занятия ведёт Лена Манакай</span></div>
+        <div><dt>Оплата</dt><span class="v">Банковской картой на защищённой странице банка-эквайера. Данные карты на manakai.art не вводятся и не хранятся.</span></div>
+        <div><dt>Чек</dt><span class="v">Электронный кассовый чек приходит на указанную почту после оплаты</span></div>
+        <div><dt>Доступ</dt><span class="v">Ссылка на участие приходит на почту в течение рабочего дня после оплаты</span></div>
+        <div><dt>Возврат</dt><span class="v">По заявлению на lenamanakai@gmail.com. Условия и сроки — в <a href="offer.html" style="text-decoration:underline;text-underline-offset:2px;">оферте</a>.</span></div>
+      </dl>
+    </div>
+
+    <!-- action подставляется после подключения эквайринга -->
+    <form id="f" action="#" method="post" novalidate>
+      <label class="fl" for="nm">Имя и фамилия</label>
+      <input id="nm" name="name" type="text" autocomplete="name" required>
+
+      <label class="fl" for="em">Почта для чека и доступа</label>
+      <input id="em" name="email" type="email" autocomplete="email" inputmode="email" required>
+
+      <label class="fl" for="tl">Телефон</label>
+      <input id="tl" name="phone" type="tel" autocomplete="tel" inputmode="tel" required>
+
+      <label class="agree">
+        <input type="checkbox" id="c1" required>
+        <span>Соглашаюсь с условиями <a href="offer.html">публичной оферты</a></span>
+      </label>
+      <label class="agree">
+        <input type="checkbox" id="c2" required>
+        <span>Даю <a href="consent.html">согласие на обработку персональных данных</a> в соответствии с <a href="privacy.html">политикой</a></span>
+      </label>
+
+      <label class="agree">
+        <input type="checkbox" id="c3">
+        <span>Хочу получать письма о новых потоках — <a href="newsletter.html">согласие на рассылку</a>, отписаться можно в один клик</span>
+      </label>
+
+      <div class="total"><span class="k">К оплате</span><span class="v" id="sum">77 000 ₽</span></div>
+      <button class="go" type="submit" disabled>Перейти к оплате</button>
+      <p class="after">Оплата проходит на странице банка. После оплаты вы вернётесь на manakai.art.</p>
+    </form>
+  </div>
+</main>
+
+<section class="legal">
+  <span>ИП Сарапульцева Елена Борисовна</span>
+  <span>ИНН 402506812202</span>
+  <span>ОГРНИП 316774600518331</span>
+  <span>г. Москва, Новинский бульвар, д. 18, стр. 1</span>
+  <a href="tel:+79255072836">+7 925 507-28-36</a>
+  <a href="mailto:lenamanakai@gmail.com">lenamanakai@gmail.com</a>
+  <a href="offer.html">Оферта</a>  <a href="privacy.html">Политика</a>  <a href="consent.html">Согласие на обработку</a>  <a href="newsletter.html">Согласие на рассылку</a>
+</section>
+
+<footer>
+  <span class="cap">manakai.art</span>
+</footer>
+
+<script>
+(function(){
+  var sum=document.getElementById("sum");
+  var radios=document.querySelectorAll('.tariff input[type=radio]');
+  function fmt(n){ return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g," ")+" ₽"; }
+  function apply(){
+    radios.forEach(function(r){ r.closest(".tariff").classList.toggle("on", r.checked);
+      if(r.checked) sum.textContent=fmt(+r.dataset.price); });
+  }
+  radios.forEach(function(r){ r.addEventListener("change", apply); });
+  apply();
+})();
+</script>
+</body>
+</html>
