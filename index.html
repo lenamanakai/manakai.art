@@ -130,6 +130,9 @@
 
   .tblock{background:var(--white);padding:clamp(18px,2.4vw,34px);display:flex;flex-direction:column;justify-content:space-between;gap:20px;}
   .tblock .disp{font-size:clamp(1.9rem,4.4vw,3.6rem);}
+  /* statement прямо на фоне, без белой плашки — как Create / Provoke / Play */
+  .tblock.plain{background:transparent;padding:0;justify-content:center;gap:0;}
+  .tblock.plain .disp{font-size:clamp(2.1rem,5.4vw,4.4rem);line-height:.9;}
   .square{aspect-ratio:1/1;}
 
   /* пустое поле — просто воздух, плёнка идёт из глобального слоя */
@@ -239,10 +242,8 @@
 <div class="air-m"></div>
 
 <div class="row r-img-state">
-  <div class="tblock square">
-    <span class="cap">—</span>
+  <div class="tblock square plain">
     <h2 class="disp">Make the<br>impossible<br>possible</h2>
-    <span class="cap">statement</span>
   </div>
   <a class="shot r45" data-v="a/italy.mp4" href="#work">
     <img src="a/italy-bw.jpg" alt="Mousson Atelier — Summer 2026">
