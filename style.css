@@ -11,13 +11,14 @@
   --mark:#FF476F;
   --soft:#F6CDD8;
   --g:clamp(16px,3.2vw,56px);
+  --hd:48px;
   --mono:'Input Mono','IBM Plex Mono',ui-monospace,Menlo,monospace;
   --disp:'Helvetica Neue',Helvetica,Arial,sans-serif;
   --text:'Lato',-apple-system,'Helvetica Neue',sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box;}
 html{background:var(--paper);-webkit-text-size-adjust:100%;}
-body{margin:0;background:transparent;color:var(--ink);font-family:var(--mono);
+body{margin:0;padding-top:var(--hd);background:transparent;color:var(--ink);font-family:var(--mono);
   font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased;}
 h1,h2,h3,p,ul,ol,figure{margin:0;}
 a{color:inherit;text-decoration:none;}
@@ -30,7 +31,7 @@ a{color:inherit;text-decoration:none;}
 /* ——— шапка ——— */
 header{display:flex;align-items:center;gap:12px 22px;padding:14px var(--g);
   border-bottom:1px solid var(--hair);background:var(--paper);
-  position:sticky;top:0;z-index:40;}
+  position:fixed;top:0;left:0;right:0;z-index:40;}
 header .sp{flex:1 1 auto;}
 header .line{display:inline-flex;align-items:center;gap:7px;}
 header .line a:hover{opacity:.55;}
@@ -39,7 +40,14 @@ header .line .sl{opacity:.45;}
 .school .mk{display:block;height:18px;width:54px;background:var(--mark);
   -webkit-mask:url(a/mai.svg) no-repeat center/contain;mask:url(a/mai.svg) no-repeat center/contain;}
 .school .lb{color:var(--mark);}
-@media (max-width:640px){ header nav{gap:13px;} .school .mk{height:15px;width:45px;} }
+@media (max-width:640px){
+  header{gap:8px;padding:11px 14px;}
+  header nav{gap:7px;}
+  header nav a,header nav .sl{font-size:9.5px;letter-spacing:.07em;}
+  .school{margin-left:8px;flex:none;gap:6px;}
+  .school .mk{height:13px;width:38px;}
+  .school .lb{font-size:9.5px;letter-spacing:.07em;}
+}
 
 /* ——— каркас документа ——— */
 main{padding:clamp(44px,8vw,110px) var(--g) clamp(40px,7vw,90px);max-width:980px;}

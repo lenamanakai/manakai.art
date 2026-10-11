@@ -131,7 +131,7 @@
       </label>
 
       <div class="total"><span class="k">К оплате</span><span class="v" id="sum">77 000 ₽</span></div>
-      <button class="go" type="submit" disabled>Перейти к оплате</button>
+      <button class="go" type="submit">Перейти к оплате</button>
       <p class="after">Оплата проходит на странице банка. После оплаты вы вернётесь на manakai.art.</p>
     </form>
   </div>
@@ -144,7 +144,7 @@
   <span>г. Москва, Новинский бульвар, д. 18, стр. 1</span>
   <a href="tel:+79255072836">+7 925 507-28-36</a>
   <a href="mailto:lenamanakai@gmail.com">lenamanakai@gmail.com</a>
-  <a href="offer.html">Оферта</a>  <a href="privacy.html">Политика</a>  <a href="consent.html">Согласие на обработку</a>  <a href="newsletter.html">Согласие на рассылку</a>
+  <a href="pay.html">Оплата</a>  <a href="offer.html">Оферта</a>  <a href="privacy.html">Политика</a>  <a href="consent.html">Согласие на обработку</a>  <a href="newsletter.html">Согласие на рассылку</a>
 </section>
 
 <footer>
@@ -162,6 +162,26 @@
   }
   radios.forEach(function(r){ r.addEventListener("change", apply); });
   apply();
+
+  /* кнопка активна только после обязательных галочек */
+  var f=document.getElementById("f"), go=f.querySelector("button.go");
+  var req=[document.getElementById("c1"), document.getElementById("c2")];
+  function gate(){ go.disabled = !req.every(function(c){ return c && c.checked; }); }
+  req.forEach(function(c){ if(c) c.addEventListener("change", gate); });
+  gate();
+
+  /* пока банк не выдал ссылку на эквайринг */
+  f.addEventListener("submit", function(e){
+    e.preventDefault();
+    var note=document.getElementById("paynote");
+    if(!note){
+      note=document.createElement("p");
+      note.id="paynote"; note.className="after";
+      note.style.color="var(--ink)";
+      note.innerHTML='Платёжный модуль подключается. Напишите в <a href="https://t.me/lenamanakai" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:2px;">Telegram</a> — пришлю ссылку на оплату и отвечу на вопросы.';
+      go.parentNode.insertBefore(note, go.nextSibling);
+    }
+  });
 })();
 </script>
 </body>

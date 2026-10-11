@@ -19,6 +19,7 @@
     --well:#111111;
     --mark:#FF476F;
     --g:clamp(16px,3.2vw,56px);
+    --hd:48px;
     --mono:'Input Mono','IBM Plex Mono',ui-monospace,Menlo,monospace;
     --disp:'Helvetica Neue',Helvetica,Arial,sans-serif;
     --text:'Lato',-apple-system,'Helvetica Neue',sans-serif;
@@ -53,7 +54,15 @@
     transform-style:preserve-3d;transition:transform .6s cubic-bezier(.22,1,.36,1);}
   .school .lb{color:var(--mark);}
   .school:hover{opacity:1;}
-  @media (max-width:640px){ header nav{gap:13px;} .school .mk{height:15px;width:45px;} }
+  /* телефон: шапка целиком влезает в строку, School не уезжает за край */
+  @media (max-width:640px){
+    header{gap:8px;padding:11px 14px;}
+    header nav{gap:7px;}
+    header nav a,header nav .sl{font-size:9.5px;letter-spacing:.07em;}
+    .school{margin-left:8px;flex:none;gap:6px;}
+    .school .mk{height:13px;width:38px;}
+    .school .lb{font-size:9.5px;letter-spacing:.07em;}
+  }
 
   /* ——— 01 showreel ——— */
   .reel{position:relative;height:100svh;min-height:520px;background:var(--well);overflow:hidden;}
@@ -61,7 +70,6 @@
   .reel .sig{position:absolute;left:var(--g);bottom:calc(var(--g) - 4px);color:rgba(255,255,255,.85);}
   /* на телефоне горизонтальный кадр показывается целиком, а не режется в вертикаль */
   @media (max-width:700px){
-    header{position:sticky;color:var(--ink);background:var(--paper);}
     .reel{height:auto;min-height:0;aspect-ratio:16/9;}
     .reel video{height:100%;object-fit:cover;}
   }
@@ -73,6 +81,7 @@
   .intro h1{display:block;margin-top:clamp(34px,6vw,86px);font-family:var(--mono);font-weight:500;
     text-transform:uppercase;letter-spacing:.12em;line-height:1.5;font-size:clamp(10.5px,1.05vw,12.5px);
     color:var(--ink);max-width:34ch;}
+  .intro .who{display:block;margin-top:clamp(16px,2.4vw,30px);color:var(--grey);}
   @media (max-width:860px){ .intro{max-width:100%;} }
 
   .air-s{height:clamp(40px,7vw,96px);}
@@ -133,10 +142,26 @@
   /* statement прямо на фоне, без белой плашки — как Create / Provoke / Play */
   .tblock.plain{background:transparent;padding:0;justify-content:center;gap:0;}
   .tblock.plain .disp{font-size:clamp(2.1rem,5.4vw,4.4rem);line-height:.9;}
+  /* statement во всю ширину, плавает на поле */
+  .state-band{padding:clamp(50px,9vw,130px) var(--g);}
+  .state-band .disp{font-size:clamp(2.4rem,7.4vw,6rem);line-height:.9;}
   .square{aspect-ratio:1/1;}
 
   /* пустое поле — просто воздух, плёнка идёт из глобального слоя */
   .empty{min-height:clamp(220px,30vw,420px);}
+  @media (max-width:860px){
+    .empty{display:none;}
+    .r-empty-vert .shot{max-width:74%;}
+  }
+
+  /* ——— звук: нажал на кадр — включился ——— */
+  .snd{position:absolute;right:9px;bottom:8px;z-index:3;display:inline-flex;align-items:center;gap:5px;
+    background:rgba(252,246,247,.88);color:var(--ink);padding:4px 8px;cursor:pointer;
+    font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;font-weight:500;
+    transition:background-color .18s linear,color .18s linear,opacity .25s linear;}
+  .snd:hover{background:var(--paper);}
+  .sounding .snd{background:var(--mark);color:#fff;}
+  .reel .snd{right:var(--g);bottom:calc(var(--g) - 4px);}
   .say{display:flex;align-items:center;min-height:clamp(300px,42vw,560px);padding-inline:var(--g);}
   .say h2{font-size:clamp(1.6rem,3.6vw,2.8rem);}
 
@@ -212,7 +237,7 @@
 </header>
 
 <!-- 01 · SHOWREEL -->
-<section class="reel" id="top">
+<section class="reel" id="top" data-snd>
   <video src="a/runa.mp4" poster="a/runa.jpg" autoplay muted loop playsinline preload="metadata"></video>
 </section>
 
@@ -220,6 +245,7 @@
 <section class="intro">
   <span class="cpp">Create / Provoke / Play</span>
   <h1>Creative direction / AI films / campaigns<br>for fashion, beauty &amp; luxury</h1>
+  <span class="who mono">by Lena Manakai</span>
 </section>
 
 <div class="row r-video-text" id="work">
@@ -254,25 +280,20 @@
 
 <div class="air-m"></div>
 
-<div class="row r-empty-vert">
-  <div class="empty"></div>
-  <a class="shot r916" data-v="a/primerka.mp4" href="#work">
-    <img src="a/primerka-bw.jpg" alt="Mousson Atelier — Summer 2026">
-    <video src="a/primerka.mp4" muted loop playsinline preload="none"></video>
-    <span class="tag mono">03</span>
-  </a>
-</div>
-
-<div class="air-m"></div>
-
 <div class="row r-three">
   <a class="shot r916" data-v="a/office.mp4" href="#work"><img src="a/office-bw.jpg" alt=""><video src="a/office.mp4" muted loop playsinline preload="none"></video></a>
   <a class="shot r916" data-v="a/safe.mp4" href="#work"><img src="a/safe-bw.jpg" alt=""><video src="a/safe.mp4" muted loop playsinline preload="none"></video></a>
   <a class="shot r916" data-v="a/padenie.mp4" href="#work"><img src="a/padenie-bw.jpg" alt=""><video src="a/padenie.mp4" muted loop playsinline preload="none"></video></a>
 </div>
 
-<div class="row r-text-video" style="margin-top:clamp(14px,2vw,26px);">
-  <div class="meta">
+<div class="row r-three" style="margin-top:clamp(8px,1.2vw,16px);">
+  <a class="shot r916" data-v="a/primerka.mp4" href="#work"><img src="a/primerka-bw.jpg" alt=""><video src="a/primerka.mp4" muted loop playsinline preload="none"></video></a>
+  <a class="shot r916" data-v="a/tweed.mp4" href="#work"><img src="a/tweed-bw.jpg" alt=""><video src="a/tweed.mp4" muted loop playsinline preload="none"></video></a>
+  <div></div>
+</div>
+
+<div class="label" style="margin-top:14px;align-items:flex-start;">
+  <div class="meta" style="max-width:52ch;">
     <span class="ttl">Mousson Atelier<br>— Summer 2026</span>
     <span class="cap">six vertical films / print campaign / aug 2026</span>
     <p class="body" style="margin-top:8px;">Шесть вертикальных jewellery films / рекламные макеты для печатных изданий: «Аэрофлот», U Magazine, Forbes.</p>
@@ -282,16 +303,15 @@
       <span>Elena Sharipova — retouch</span>
     </div>
   </div>
-  <a class="shot r916" data-v="a/tweed.mp4" href="#work"><img src="a/tweed-bw.jpg" alt=""><video src="a/tweed.mp4" muted loop playsinline preload="none"></video></a>
 </div>
 
 <div class="air-l"></div>
 
 <div class="row r-video-text">
-  <a class="shot r169" data-v="a/solange.mp4" href="#work">
+  <a class="shot r169" data-v="a/solange.mp4" data-snd href="#work">
     <img src="a/solange.jpg" alt="Solange">
     <video src="a/solange.mp4" muted loop playsinline preload="none"></video>
-    <span class="tag mono">04</span>
+    <span class="tag mono">03</span>
   </a>
   <div class="meta">
     <span class="ttl">Solange</span>
@@ -308,7 +328,11 @@
 <div class="air-l"></div>
 
 <div class="row r-video-text">
-  <img src="a/poster.jpg" alt="Mercury Luxury Home" loading="lazy">
+  <a class="shot r169" data-v="a/mercury.mp4" data-snd href="#work">
+    <img src="a/mercury.jpg" alt="Mercury Luxury Home">
+    <video src="a/mercury.mp4" muted loop playsinline preload="none"></video>
+    <span class="tag mono">04</span>
+  </a>
   <div class="meta">
     <span class="ttl">Mercury<br>Luxury Home</span>
     <span class="cap">film / digital storefront / sep 2025</span>
@@ -331,8 +355,12 @@
 
 <div class="air-l"></div>
 
+<section class="state-band">
+  <h2 class="disp">Don’t work,<br>play</h2>
+</section>
+
 <div class="row r-video-text">
-  <a class="shot r169" data-v="a/aurum.mp4" href="#work">
+  <a class="shot r169" data-v="a/aurum.mp4" data-snd href="#work">
     <img src="a/aurum.jpg" alt="Aurum Time">
     <video src="a/aurum.mp4" muted loop playsinline preload="none"></video>
     <span class="tag mono">05</span>
@@ -354,7 +382,7 @@
 <div class="air-l"></div>
 
 <div class="row r-video-text">
-  <a class="shot r169" data-v="a/ice.mp4" href="#work">
+  <a class="shot r169" data-v="a/ice.mp4" data-snd href="#work">
     <img src="a/ice.jpg" alt="Ice Towers">
     <video src="a/ice.mp4" muted loop playsinline preload="none"></video>
     <span class="tag mono">06</span>
@@ -376,12 +404,12 @@
 <div class="air-l"></div>
 
 <div class="full-row">
-  <a class="shot wide" data-v="a/romash1.mp4" href="#work">
+  <a class="shot wide" data-v="a/romash1.mp4" data-snd href="#work">
     <img src="a/romash1.jpg" alt="Romanovamakeup">
     <video src="a/romash1.mp4" muted loop playsinline preload="none"></video>
     <span class="tag mono">07</span>
   </a>
-  <a class="shot wide" data-v="a/romash2.mp4" href="#work" style="margin-top:clamp(8px,1.2vw,16px);">
+  <a class="shot wide" data-v="a/romash2.mp4" data-snd href="#work" style="margin-top:clamp(8px,1.2vw,16px);">
     <img src="a/romash2.jpg" alt="Romanovamakeup">
     <video src="a/romash2.mp4" muted loop playsinline preload="none"></video>
   </a>
@@ -401,7 +429,7 @@
 <div class="air-l"></div>
 
 <div class="full-row">
-  <a class="shot r169" data-v="a/runa.mp4" href="#work">
+  <a class="shot r169" data-v="a/runa.mp4" data-snd href="#work">
     <img src="a/runa.jpg" alt="RUNA">
     <video src="a/runa.mp4" muted loop playsinline preload="none"></video>
     <span class="tag mono">08</span>
@@ -459,7 +487,7 @@
   <span>г. Москва, Новинский бульвар, д. 18, стр. 1</span>
   <a href="tel:+79255072836">+7 925 507-28-36</a>
   <a href="mailto:lenamanakai@gmail.com">lenamanakai@gmail.com</a>
-  <a href="offer.html">Оферта</a>  <a href="privacy.html">Политика</a>  <a href="consent.html">Согласие на обработку</a>  <a href="newsletter.html">Согласие на рассылку</a>
+  <a href="pay.html">Оплата</a>  <a href="offer.html">Оферта</a>  <a href="privacy.html">Политика</a>  <a href="consent.html">Согласие на обработку</a>  <a href="newsletter.html">Согласие на рассылку</a>
 </section>
 
 <footer>
@@ -473,25 +501,89 @@
 
   /* ——— ч/б → цвет ——— */
   var shots = [].slice.call(document.querySelectorAll(".shot[data-v]"));
-  shots.forEach(function(s){
-    var v = s.querySelector("video"); if(!v) return;
-    if (fine){
+
+  /* ——— звук: один на весь сайт, включается кликом по кадру ——— */
+  /* метка появляется только там, где у ролика есть звуковая дорожка */
+  var soundBoxes = [].slice.call(document.querySelectorAll("[data-snd]"));
+  var sounding = null;
+
+  function label(box, on){
+    var b = box.querySelector(".snd");
+    if (b) b.textContent = on ? "Sound on" : "Sound";
+  }
+  function silence(){
+    if (!sounding) return;
+    var v = sounding.querySelector("video");
+    if (v) v.muted = true;
+    sounding.classList.remove("sounding");
+    label(sounding, false);
+    sounding = null;
+  }
+  function voice(box){
+    var v = box.querySelector("video"); if(!v) return;
+    if (sounding === box){ silence(); return; }
+    silence();
+    if (v.preload === "none") v.preload = "auto";
+    box.classList.add("on");
+    v.muted = false; v.volume = 1;
+    v.play().catch(function(){});
+    box.classList.add("sounding");
+    label(box, true);
+    sounding = box;
+  }
+
+  soundBoxes.forEach(function(box){
+    var v = box.querySelector("video"); if(!v) return;
+    var b = document.createElement("span");
+    b.className = "snd"; b.setAttribute("role","button"); b.setAttribute("tabindex","0");
+    b.textContent = "Sound";
+    box.appendChild(b);
+    box.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); voice(box); });
+    b.addEventListener("keydown", function(e){
+      if (e.key === "Enter" || e.key === " "){ e.preventDefault(); voice(box); }
+    });
+  });
+  shots.forEach(function(s){ s.removeAttribute("href"); s.setAttribute("role","button"); s.setAttribute("tabindex","0"); });
+
+  /* наведение на десктопе — беззвучный предпросмотр */
+  if (fine){
+    shots.forEach(function(s){
+      var v = s.querySelector("video"); if(!v) return;
       s.addEventListener("pointerenter", function(){
         if (v.preload==="none") v.preload="auto";
         s.classList.add("on"); v.play().catch(function(){});
       });
-      s.addEventListener("pointerleave", function(){ s.classList.remove("on"); v.pause(); });
-    }
-  });
-  if (!fine){
-    var io = new IntersectionObserver(function(es){
-      es.forEach(function(e){
-        var s=e.target, v=s.querySelector("video"); if(!v) return;
-        if (e.intersectionRatio > .6){ if(v.preload==="none") v.preload="auto"; s.classList.add("on"); v.play().catch(function(){}); }
-        else { s.classList.remove("on"); v.pause(); }
+      s.addEventListener("pointerleave", function(){
+        if (s === sounding) return;
+        s.classList.remove("on"); v.pause();
       });
-    },{threshold:[0,.6,1]});
+    });
+  } else {
+    /* телефон: играет только один кадр — тот, что ближе всех к центру экрана */
+    var vis = new Map();
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ vis.set(e.target, e.intersectionRatio); });
+      var best = null, bestR = 0;
+      vis.forEach(function(r, el){ if (r > bestR){ bestR = r; best = el; } });
+      shots.forEach(function(s){
+        var v = s.querySelector("video"); if(!v) return;
+        if (s === best && bestR > .5){
+          if (v.preload==="none") v.preload="auto";
+          s.classList.add("on"); v.play().catch(function(){});
+        } else if (s !== sounding){
+          s.classList.remove("on"); v.pause();
+        }
+      });
+    },{threshold:[0,.25,.5,.75,1]});
     shots.forEach(function(s){ io.observe(s); });
+  }
+
+  /* ——— шапка: белая над шоурилом, тёмная дальше ——— */
+  var hd=document.getElementById("hd"), reel=document.getElementById("top");
+  if (hd && reel){
+    new IntersectionObserver(function(es){
+      hd.classList.toggle("dark", !es[0].isIntersecting);
+    },{rootMargin:"-56px 0px 0px 0px", threshold:0}).observe(reel);
   }
 
   /* ——— окно с серией: листается на месте ——— */
@@ -521,13 +613,6 @@
     box.addEventListener("pointercancel", function(){ x0=null; });
   });
 
-  /* ——— шапка: белая над шоурилом, тёмная дальше ——— */
-  var hd=document.getElementById("hd"), reel=document.getElementById("top");
-  if (hd && reel){
-    new IntersectionObserver(function(es){
-      hd.classList.toggle("dark", !es[0].isIntersecting);
-    },{rootMargin:"-56px 0px 0px 0px", threshold:0}).observe(reel);
-  }
 
   /* ——— метка прячется, когда дошли до контакта ——— */
   var wrap=document.getElementById("enq-wrap"), enq=document.getElementById("enq"),
@@ -595,7 +680,7 @@
   "  vec2 grad = vec2(hx-h, hy-h)/e;",
   "  float thick = 0.55 + h*0.9 + length(grad)*0.012;",
   "  vec3 c = film(thick);",
-  "  float a = clamp(abs(h)*0.9 + length(grad)*0.010, 0.0, 1.0) * 0.5;",
+  "  float a = clamp(abs(h)*0.9 + length(grad)*0.010, 0.0, 1.0) * 0.38;",
   "  gl_FragColor = vec4(c, a);",
   "}"].join("\n");
 
@@ -622,7 +707,7 @@
 
   function add(x,y){
     var now=(performance.now()-t0)/1000;
-    if(now-last < 0.045) return;
+    if(now-last < 0.11) return;
     last=now;
     pts[idx*3]=(x/innerHeight); pts[idx*3+1]=1.0-(y/innerHeight); pts[idx*3+2]=now;
     idx=(idx+1)%N;
