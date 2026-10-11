@@ -79,6 +79,17 @@
   .brow span{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;}
   .kt{font-family:var(--text);font-weight:300;font-size:15px;line-height:1.55;}
 
+  /* телефон: ничего не распирает страницу */
+  html,body{overflow-x:hidden;}
+  .band .bn,.band p,.duo .say h3{overflow-wrap:anywhere;}
+  @media (max-width:640px){
+    .band .bn{font-size:clamp(2.4rem,15vw,4.4rem);letter-spacing:-.045em;}
+    .band p{font-size:clamp(1rem,4.6vw,1.35rem);}
+    .hero .mark{height:clamp(48px,16vw,90px);}
+    .cohort{gap:14px 24px;}
+    .cohort .big{font-size:clamp(2rem,13vw,3.4rem);}
+  }
+
   /* картинка — текст, через строку меняются местами */
   .duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(18px,3.4vw,56px);
     align-items:center;padding:clamp(26px,5vw,74px) 0;border-bottom:1px solid var(--hair);}
@@ -97,6 +108,18 @@
 </head>
 <body>
 
+<script>
+/* страница всегда открывается с розовой плашки, а не с того места, где её закрыли */
+(function(){
+  if("scrollRestoration" in history) history.scrollRestoration="manual";
+  if(location.hash) return;
+  function t(){ window.scrollTo(0,0); }
+  t();
+  document.addEventListener("DOMContentLoaded", t);
+  window.addEventListener("load", t);
+})();
+</script>
+
 <header>
   <nav class="line mono">
     <a href="index.html">MANAKAI</a><span class="sl">/</span><a href="index.html#work">Work</a><span class="sl">/</span><a href="about.html">About</a><span class="sl">/</span><a href="index.html#contact">Contact</a>
@@ -105,7 +128,7 @@
   <span class="school"><span class="mk"></span><span class="lb mono">School</span></span>
 </header>
 
-<section class="hero">
+<section class="hero" id="top">
   <span class="mark" role="img" aria-label="M’AI"></span>
   <p class="sub">Fashion art direction × AI production<br>Fashion / Beauty / Jewellery / Luxury</p>
 </section>
