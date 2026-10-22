@@ -4,6 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MANAKAI — Lena Manakai</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MANAKAI">
+<meta property="og:title" content="MANAKAI — Lena Manakai">
+<meta property="og:description" content="Lena Manakai — photographer, director, art director. Creative direction, AI films and campaigns for fashion, beauty & luxury.">
+<meta property="og:url" content="https://manakai.art/">
+<meta property="og:image" content="https://manakai.art/og-main.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="description" content="Lena Manakai — photographer, director, art director. Creative direction, AI films and campaigns for fashion, beauty & luxury.">
 <link rel="canonical" href="https://manakai.art/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -52,16 +62,18 @@
   .school .mk{display:block;height:18px;width:54px;background:var(--mark);
     -webkit-mask:url(a/mai.svg) no-repeat center/contain;mask:url(a/mai.svg) no-repeat center/contain;
     transform-style:preserve-3d;transition:transform .6s cubic-bezier(.22,1,.36,1);}
-  .school .lb{color:var(--mark);}
+  .school .lb{color:var(--mark);display:inline-flex;gap:.12em;}
+  .school .lb i{font-style:normal;}
   .school:hover{opacity:1;}
   /* телефон: шапка целиком влезает в строку, School не уезжает за край */
   @media (max-width:640px){
     header{gap:8px;padding:11px 14px;}
     header nav{gap:7px;}
     header nav a,header nav .sl{font-size:9.5px;letter-spacing:.07em;}
-    .school{margin-left:8px;flex:none;gap:6px;}
-    .school .mk{height:13px;width:38px;}
-    .school .lb{font-size:9.5px;letter-spacing:.07em;}
+    /* на телефоне M'AI и SCHOOL складываются в один знак одной ширины */
+    .school{margin-left:10px;flex:none;flex-direction:column;align-items:stretch;gap:4px;}
+    .school .mk{height:24px;width:72px;}
+    .school .lb{width:72px;justify-content:space-between;gap:0;font-size:10.5px;letter-spacing:0;line-height:1;}
   }
 
   /* ——— 01 showreel ——— */
@@ -241,13 +253,13 @@
   </nav>
   <span class="sp"></span>
   <a class="school" href="school.html" aria-label="M’AI School">
-    <span class="mk" id="mk"></span><span class="lb mono">School</span>
+    <span class="mk" id="mk"></span><span class="lb mono"><i>S</i><i>C</i><i>H</i><i>O</i><i>O</i><i>L</i></span>
   </a>
 </header>
 
 <!-- 01 · SHOWREEL -->
 <section class="reel" id="top" data-snd>
-  <video src="a/runa.mp4?v=4" poster="a/runa.jpg" autoplay muted loop playsinline preload="metadata"></video>
+  <video src="a/runa.mp4?v=5" poster="a/runa.jpg" autoplay muted loop playsinline preload="metadata"></video>
 </section>
 
 <!-- 02 · INTRODUCTION -->
@@ -260,7 +272,7 @@
 <div class="row r-video-text" id="work">
   <a class="shot r169" data-v="a/nika.mp4" data-snd href="#work">
     <img src="a/nika-bw.jpg" alt="Mousson Atelier × NIKA">
-    <video src="a/nika.mp4?v=4" muted loop playsinline preload="none"></video>
+    <video src="a/nika.mp4?v=5" muted loop playsinline preload="none"></video>
     <span class="tag mono">01</span>
   </a>
   <div class="meta">
@@ -282,7 +294,7 @@
   </div>
   <a class="shot r45" data-v="a/italy.mp4" data-snd href="#work">
     <img src="a/italy-bw.jpg" alt="Mousson Atelier — Summer 2026">
-    <video src="a/italy.mp4?v=4" muted loop playsinline preload="none"></video>
+    <video src="a/italy.mp4?v=5" muted loop playsinline preload="none"></video>
     <span class="tag mono">02</span>
   </a>
 </div>
@@ -291,7 +303,7 @@
 
 <div class="row r-three">
   <div class="shot r916 soon"><span class="mono">Coming soon</span></div>
-  <a class="shot r916" data-v="a/safe.mp4" data-snd href="#work"><img src="a/safe-bw.jpg" alt=""><video src="a/safe.mp4?v=4" muted loop playsinline preload="none"></video></a>
+  <a class="shot r916" data-v="a/safe.mp4" data-snd href="#work"><img src="a/safe-bw.jpg" alt=""><video src="a/safe.mp4?v=5" muted loop playsinline preload="none"></video></a>
   <div class="shot r916 soon"><span class="mono">Coming soon</span></div>
 </div>
 
@@ -319,7 +331,7 @@
 <div class="row r-video-text">
   <a class="shot r169" data-v="a/solange.mp4" data-snd href="#work">
     <img src="a/solange.jpg" alt="Solange">
-    <video src="a/solange.mp4?v=4" muted loop playsinline preload="none"></video>
+    <video src="a/solange.mp4?v=5" muted loop playsinline preload="none"></video>
     <span class="tag mono">03</span>
   </a>
   <div class="meta">
@@ -339,7 +351,7 @@
 <div class="row r-video-text">
   <a class="shot r169" data-v="a/mercury.mp4" data-snd href="#work">
     <img src="a/mercury.jpg" alt="Mercury Luxury Home">
-    <video src="a/mercury.mp4?v=4" muted loop playsinline preload="none"></video>
+    <video src="a/mercury.mp4?v=5" muted loop playsinline preload="none"></video>
     <span class="tag mono">04</span>
   </a>
   <div class="meta">
@@ -371,7 +383,7 @@
 <div class="row r-video-text">
   <a class="shot r169" data-v="a/aurum.mp4" data-snd href="#work">
     <img src="a/aurum.jpg" alt="Aurum Time">
-    <video src="a/aurum.mp4?v=4" muted loop playsinline preload="none"></video>
+    <video src="a/aurum.mp4?v=5" muted loop playsinline preload="none"></video>
     <span class="tag mono">05</span>
   </a>
   <div class="meta">
@@ -393,7 +405,7 @@
 <div class="row r-video-text">
   <a class="shot r169" data-v="a/ice.mp4" data-snd href="#work">
     <img src="a/ice.jpg" alt="Ice Towers">
-    <video src="a/ice.mp4?v=4" muted loop playsinline preload="none"></video>
+    <video src="a/ice.mp4?v=5" muted loop playsinline preload="none"></video>
     <span class="tag mono">06</span>
   </a>
   <div class="meta">
@@ -415,12 +427,12 @@
 <div class="full-row">
   <a class="shot wide" data-v="a/romash1.mp4" data-snd href="#work">
     <img src="a/romash1.jpg" alt="Romanovamakeup">
-    <video src="a/romash1.mp4?v=4" muted loop playsinline preload="none"></video>
+    <video src="a/romash1.mp4?v=5" muted loop playsinline preload="none"></video>
     <span class="tag mono">07</span>
   </a>
   <a class="shot wide" data-v="a/romash2.mp4" data-snd href="#work" style="margin-top:clamp(8px,1.2vw,16px);">
     <img src="a/romash2.jpg" alt="Romanovamakeup">
-    <video src="a/romash2.mp4?v=4" muted loop playsinline preload="none"></video>
+    <video src="a/romash2.mp4?v=5" muted loop playsinline preload="none"></video>
   </a>
 </div>
 
@@ -440,7 +452,7 @@
 <div class="full-row">
   <a class="shot r169" data-v="a/runa.mp4" data-snd href="#work">
     <img src="a/runa.jpg" alt="RUNA">
-    <video src="a/runa.mp4?v=4" muted loop playsinline preload="none"></video>
+    <video src="a/runa.mp4?v=5" muted loop playsinline preload="none"></video>
     <span class="tag mono">08</span>
   </a>
 </div>

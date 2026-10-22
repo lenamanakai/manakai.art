@@ -39,14 +39,17 @@ header .line .sl{opacity:.45;}
 .school{display:inline-flex;align-items:center;gap:9px;margin-left:clamp(20px,4vw,64px);}
 .school .mk{display:block;height:18px;width:54px;background:var(--mark);
   -webkit-mask:url(a/mai.svg) no-repeat center/contain;mask:url(a/mai.svg) no-repeat center/contain;}
-.school .lb{color:var(--mark);}
+.school .lb{color:var(--mark);display:inline-flex;gap:.12em;}
+.school .lb i{font-style:normal;}
 @media (max-width:640px){
   header{gap:8px;padding:11px 14px;}
   header nav{gap:7px;}
   header nav a,header nav .sl{font-size:9.5px;letter-spacing:.07em;}
-  .school{margin-left:8px;flex:none;gap:6px;}
-  .school .mk{height:13px;width:38px;}
-  .school .lb{font-size:9.5px;letter-spacing:.07em;}
+  /* на телефоне M'AI и SCHOOL складываются в один знак одной ширины */
+  :root{--hd:62px;}
+  .school{margin-left:10px;flex:none;flex-direction:column;align-items:stretch;gap:4px;}
+  .school .mk{height:24px;width:72px;}
+  .school .lb{width:72px;justify-content:space-between;gap:0;font-size:10.5px;letter-spacing:0;line-height:1;}
 }
 
 /* ——— каркас документа ——— */
