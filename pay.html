@@ -70,6 +70,23 @@
   .after{font-family:var(--text);font-weight:300;font-size:12px;line-height:1.5;color:var(--grey);margin-top:12px;}
   .ph{display:inline-block;border:1px solid var(--mark);color:var(--mark);padding:1px 6px;
     font-family:var(--mono);font-size:10px;letter-spacing:.08em;}
+  .promo{margin-top:18px;}
+  .promo .pl{background:none;border:0;padding:0;cursor:pointer;font-family:var(--mono);font-size:10px;
+    letter-spacing:.13em;text-transform:uppercase;color:var(--grey);text-decoration:underline;text-underline-offset:3px;}
+  .promo .pl:hover{color:var(--ink);}
+  .promo .prow{display:flex;gap:8px;margin-top:8px;}
+  .promo .prow[hidden]{display:none;}
+  .promo input{flex:1;min-width:0;padding:10px 11px;border:1px solid var(--hair);background:var(--paper);
+    font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);}
+  .promo input:focus{outline:none;border-color:var(--mark);}
+  .promo .pa{flex:none;padding:0 14px;border:1px solid var(--ink);background:none;cursor:pointer;
+    font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink);}
+  .promo .pm{font-family:var(--text);font-weight:300;font-size:12.5px;line-height:1.5;margin-top:7px;color:var(--grey);}
+  .promo .pm.ok{color:var(--mark);}
+  .pr s,.total s{font-weight:400;color:var(--grey);text-decoration-thickness:1px;margin-right:.35em;font-size:.62em;letter-spacing:-.01em;}
+  form input.bad{border-color:var(--mark);}
+  .done h2{font-family:var(--disp);font-weight:700;letter-spacing:-.03em;font-size:1.6rem;line-height:1.1;}
+  .done p{font-family:var(--text);font-weight:300;font-size:14px;line-height:1.55;color:var(--grey);margin-top:10px;}
 </style>
 </head>
 <body>
@@ -115,7 +132,6 @@
       </dl>
     </div>
 
-    <!-- action подставляется после подключения эквайринга -->
     <form id="f" action="#" method="post" novalidate>
       <label class="fl" for="nm">Имя и фамилия</label>
       <input id="nm" name="name" type="text" autocomplete="name" required>
@@ -140,7 +156,16 @@
         <span>Хочу получать письма о новых потоках — <a href="newsletter.html">согласие на рассылку</a>, отписаться можно в один клик</span>
       </label>
 
-      <div class="total"><span class="k">К оплате</span><span class="v" id="sum">77 000 ₽</span></div>
+      <div class="promo" id="promo" hidden>
+        <button type="button" class="pl" id="pt">Есть промокод</button>
+        <div class="prow" id="pw" hidden>
+          <input id="pc" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Промокод" placeholder="Промокод">
+          <button type="button" class="pa" id="pa">Применить</button>
+        </div>
+        <p class="pm" id="pm"></p>
+      </div>
+
+      <div class="total"><span class="k">К оплате</span><span class="v"><s id="old" hidden></s><span id="sum">77 000 ₽</span></span></div>
       <button class="go" type="submit">Перейти к оплате</button>
       <p class="after">Оплата проходит на странице банка. После оплаты вы вернётесь на manakai.art.</p>
     </form>
@@ -163,36 +188,142 @@
 
 <script>
 (function(){
-  var sum=document.getElementById("sum");
-  var radios=document.querySelectorAll('.tariff input[type=radio]');
+  /* Адрес функции оплаты в Яндекс Облаке. Пусто — оплата ещё не подключена */
+  var PAY_API = "";
+
+  var f=document.getElementById("f"), go=f.querySelector("button.go");
+  var sum=document.getElementById("sum"), old=document.getElementById("old");
+  var radios=[].slice.call(document.querySelectorAll('.tariff input[type=radio]'));
+  var qs=new URLSearchParams(location.search);
+  var promo={code:"", totals:{}}; /* totals: {standard: 65450, vip: 96050} */
+
   function fmt(n){ return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g," ")+" ₽"; }
-  function apply(){
-    radios.forEach(function(r){ r.closest(".tariff").classList.toggle("on", r.checked);
-      if(r.checked) sum.textContent=fmt(+r.dataset.price); });
+  function cur(){ var r=radios.filter(function(x){return x.checked;})[0]; return r||radios[0]; }
+
+  function note(html, strong){
+    var n=document.getElementById("paynote");
+    if(!n){ n=document.createElement("p"); n.id="paynote"; n.className="after"; go.parentNode.insertBefore(n, go.nextSibling); }
+    n.style.color=strong?"var(--ink)":"";
+    n.innerHTML=html;
   }
-  radios.forEach(function(r){ r.addEventListener("change", apply); });
+  var TG='<a href="https://t.me/lenamanakai" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:2px;">Telegram</a>';
+
+  function apply(){
+    radios.forEach(function(r){
+      var card=r.closest(".tariff"), pr=card.querySelector(".pr"), base=+r.dataset.price, t=promo.totals[r.value];
+      card.classList.toggle("on", r.checked);
+      pr.innerHTML = (t && t<base) ? "<s>"+fmt(base)+"</s>"+fmt(t) : fmt(base);
+    });
+    var r=cur(), base=+r.dataset.price, t=promo.totals[r.value];
+    if(t && t<base){ old.textContent=fmt(base); old.hidden=false; sum.textContent=fmt(t); }
+    else { old.hidden=true; sum.textContent=fmt(base); }
+  }
+  radios.forEach(function(r){ r.addEventListener("change", function(){ apply(); promoMsg(); }); });
+
+  /* тариф из ссылки: pay.html?tariff=vip */
+  if(qs.get("tariff")){ radios.forEach(function(r){ r.checked=(r.value===qs.get("tariff")); }); if(!cur().checked) radios[0].checked=true; }
   apply();
 
   /* кнопка активна только после обязательных галочек */
-  var f=document.getElementById("f"), go=f.querySelector("button.go");
   var req=[document.getElementById("c1"), document.getElementById("c2")];
   function gate(){ go.disabled = !req.every(function(c){ return c && c.checked; }); }
   req.forEach(function(c){ if(c) c.addEventListener("change", gate); });
   gate();
 
-  /* пока банк не выдал ссылку на эквайринг */
+  /* ---------- промокод ---------- */
+  var box=document.getElementById("promo"), pt=document.getElementById("pt"), pw=document.getElementById("pw"),
+      pc=document.getElementById("pc"), pa=document.getElementById("pa"), pm=document.getElementById("pm");
+  var lastErr="", lastInfo=null;
+
+  function untilText(d){
+    if(!d) return "";
+    var m=["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+    var p=String(d).split("-"); return " · до "+(+p[2])+" "+m[+p[1]-1];
+  }
+  function promoMsg(){
+    pm.className="pm";
+    if(!promo.code){ pm.textContent=lastErr; return; }
+    var t=promo.totals[cur().value];
+    if(t){ pm.className="pm ok"; pm.textContent="Промокод "+promo.code+" применён"+(lastInfo?(" · скидка "+(/%$/.test(lastInfo.off)?lastInfo.off:fmt(+lastInfo.off))+untilText(lastInfo.until)):""); }
+    else { pm.textContent="Промокод "+promo.code+" не действует для этого тарифа"; }
+  }
+  function getQuote(p, c){
+    return fetch(PAY_API+"?a=promo&p="+encodeURIComponent(p)+"&c="+encodeURIComponent(c)).then(function(r){ return r.json(); });
+  }
+  function applyPromo(){
+    var c=pc.value.trim().toUpperCase();
+    lastErr=""; lastInfo=null;
+    if(!c){ promo={code:"",totals:{}}; apply(); promoMsg(); return; }
+    pa.disabled=true; pm.className="pm"; pm.textContent="Проверяем…";
+    Promise.all(radios.map(function(r){ return getQuote(r.value, c); })).then(function(res){
+      var totals={}, err="";
+      res.forEach(function(q,i){ if(q.promo){ totals[radios[i].value]=q.total; lastInfo=q.promo; } else if(q.promoError) err=err||q.promoError; });
+      if(Object.keys(totals).length){ promo={code:c, totals:totals}; }
+      else { promo={code:"",totals:{}}; lastErr=err||"Промокод не подошёл"; }
+      apply(); promoMsg();
+    }).catch(function(){ pm.textContent="Не получилось проверить промокод, попробуйте ещё раз"; })
+      .then(function(){ pa.disabled=false; });
+  }
+  if(PAY_API){
+    box.hidden=false;
+    pt.addEventListener("click", function(){ pw.hidden=!pw.hidden; if(!pw.hidden) pc.focus(); });
+    pa.addEventListener("click", applyPromo);
+    pc.addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); applyPromo(); } });
+    /* промокод из ссылки: pay.html?promo=WEBINAR */
+    if(qs.get("promo")){ pw.hidden=false; pc.value=qs.get("promo"); applyPromo(); }
+  }
+
+  /* ---------- возврат со страницы банка ---------- */
+  if(qs.get("paid")){
+    f.classList.add("done");
+    f.innerHTML='<h2>Оплата прошла</h2><p>Электронный чек придёт на почту. Ссылка на участие — в течение рабочего дня после оплаты.</p><p>Если что-то не пришло, напишите в '+TG+' или на <a href="mailto:lenamanakai@gmail.com" style="text-decoration:underline;text-underline-offset:2px;">lenamanakai@gmail.com</a></p>';
+    return;
+  }
+  if(qs.get("fail")){
+    note('Оплата не прошла. Можно попробовать ещё раз или написать в '+TG, true);
+  }
+
+  /* ---------- отправка ---------- */
+  var fields={name:document.getElementById("nm"), email:document.getElementById("em"), phone:document.getElementById("tl")};
+  Object.keys(fields).forEach(function(k){ fields[k].addEventListener("input", function(){ fields[k].classList.remove("bad"); }); });
+
   f.addEventListener("submit", function(e){
     e.preventDefault();
-    var note=document.getElementById("paynote");
-    if(!note){
-      note=document.createElement("p");
-      note.id="paynote"; note.className="after";
-      note.style.color="var(--ink)";
-      note.innerHTML='Платёжный модуль подключается. Напишите в <a href="https://t.me/lenamanakai" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:2px;">Telegram</a> — пришлю ссылку на оплату и отвечу на вопросы.';
-      go.parentNode.insertBefore(note, go.nextSibling);
+    if(!PAY_API){
+      note('Платёжный модуль подключается. Напишите в '+TG+' — пришлю ссылку на оплату и отвечу на вопросы.', true);
+      return;
     }
+    var bad=null;
+    if(!fields.name.value.trim()) bad=bad||fields.name;
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email.value.trim())) bad=bad||fields.email;
+    if(fields.phone.value.replace(/\D/g,"").length<10) bad=bad||fields.phone;
+    if(bad){
+      bad.classList.add("bad"); bad.focus();
+      note(bad===fields.name?"Укажите имя и фамилию":bad===fields.email?"Проверьте почту — на неё придёт чек":"Проверьте телефон", true);
+      return;
+    }
+    go.disabled=true; var label=go.textContent; go.textContent="Переходим к оплате…";
+    var body={
+      product:cur().value, promo:promo.totals[cur().value]?promo.code:"",
+      name:fields.name.value.trim(), email:fields.email.value.trim(), phone:fields.phone.value.trim(),
+      offer:document.getElementById("c1").checked, consent:document.getElementById("c2").checked,
+      news:document.getElementById("c3").checked
+    };
+    fetch(PAY_API+"?a=init", {method:"POST", headers:{"Content-Type":"text/plain"}, body:JSON.stringify(body)})
+      .then(function(r){ return r.json(); })
+      .then(function(r){
+        if(r.ok && r.url){ location.href=r.url; return; }
+        if(r.field && fields[r.field]) fields[r.field].classList.add("bad");
+        note((r.error||"Не получилось создать платёж")+'. Если повторится — напишите в '+TG, true);
+        go.disabled=false; go.textContent=label;
+      })
+      .catch(function(){
+        note('Не получилось связаться с банком. Попробуйте ещё раз через минуту или напишите в '+TG, true);
+        go.disabled=false; go.textContent=label;
+      });
   });
 })();
 </script>
+
 </body>
 </html>
