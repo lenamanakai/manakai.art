@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /pay
+Disallow: /a/index.html
+Disallow: /a/offer.html
+Disallow: /a/school.html
+
+Sitemap: https://manakai.art/sitemap.xml
