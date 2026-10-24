@@ -290,7 +290,8 @@
   f.addEventListener("submit", function(e){
     e.preventDefault();
     if(!PAY_API){
-      note('Платёжный модуль подключается. Напишите в '+TG+' — пришлю ссылку на оплату и отвечу на вопросы.', true);
+      go.textContent="Coming soon"; go.disabled=true;
+      note('Оплата на сайте откроется в ближайшие дни. Забронировать место можно в '+TG, true);
       return;
     }
     var bad=null;
