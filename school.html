@@ -214,7 +214,7 @@
     </div>
         <div class="acts">
           <a class="btn" href="mai.html">Программа курса</a>
-          <a class="btn ghost" href="pay.html">Оплатить участие</a>
+          <a class="btn ghost soon" href="pay.html">Оплатить участие</a>
         </div>
       </div>
     </div>
@@ -265,7 +265,7 @@
   <span>г. Москва, Новинский бульвар, д. 18, стр. 1</span>
   <a href="tel:+79255072836">+7 925 507-28-36</a>
   <a href="mailto:lenamanakai@gmail.com">lenamanakai@gmail.com</a>
-  <a href="pay.html">Оплата</a>  <a href="offer.html">Оферта</a>  <a href="privacy.html">Политика</a>  <a href="consent.html">Согласие на обработку</a>  <a href="newsletter.html">Согласие на рассылку</a>
+  <a href="offer.html">Оферта</a>  <a href="privacy.html">Политика</a>  <a href="consent.html">Согласие на обработку</a>  <a href="newsletter.html">Согласие на рассылку</a>
 </section>
 
 <footer class="slab" style="color:var(--grey);padding-bottom:clamp(30px,5vw,56px);">
@@ -331,6 +331,12 @@
   var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} }); },{rootMargin:"0px 0px -8% 0px"});
   els.forEach(function(e){ io.observe(e); });
 })();
+</script>
+<script>
+/* продажи ещё не открыты: кнопка оплаты показывает Coming soon */
+document.querySelectorAll("a.soon").forEach(function(a){
+  a.addEventListener("click", function(e){ e.preventDefault(); a.textContent="Coming soon"; });
+});
 </script>
 </body>
 </html>
