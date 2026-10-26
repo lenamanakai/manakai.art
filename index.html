@@ -233,6 +233,16 @@
   @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} }
   .ph{display:inline-block;border:1px solid var(--mark);color:var(--mark);padding:1px 6px;
     font-family:var(--mono);font-size:10px;letter-spacing:.08em;}
+
+  /* узкие телефоны: шапка ужимается, знак M'AI SCHOOL всегда виден целиком */
+  header nav{min-width:0;}
+  a[href^="mailto:"]{overflow-wrap:anywhere;}
+  @media (max-width:400px){
+    header{padding:11px 12px;gap:6px;}
+    header nav{gap:5px;overflow:hidden;white-space:nowrap;}
+    header nav a,header nav .sl{font-size:8.6px;letter-spacing:.04em;}
+    .school{margin-left:6px;}
+  }
 </style>
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">

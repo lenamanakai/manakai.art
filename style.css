@@ -85,3 +85,13 @@ footer{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between;a
   padding:16px var(--g) 26px;}
 
 :where(a,button,input,select):focus-visible{outline:2px solid var(--mark);outline-offset:3px;}
+
+/* узкие телефоны: шапка ужимается, знак M'AI SCHOOL всегда виден целиком */
+header nav{min-width:0;}
+a[href^="mailto:"]{overflow-wrap:anywhere;}
+@media (max-width:400px){
+  header{padding:11px 12px;gap:6px;}
+  header nav{gap:5px;overflow:hidden;white-space:nowrap;}
+  header nav a,header nav .sl{font-size:8.6px;letter-spacing:.04em;}
+  .school{margin-left:6px;}
+}
