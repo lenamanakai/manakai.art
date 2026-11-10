@@ -71,5 +71,14 @@
 <footer>
   <span class="cap">manakai.art</span>
 </footer>
+<script>
+/* возврат со страницы банка: показываем результат оплаты */
+(function(){
+  var q=new URLSearchParams(location.search), h=document.querySelector(".soonpage h1"), k=document.querySelector(".soonpage .kicker");
+  if(!h) return;
+  if(q.get("paid")){ h.textContent="Оплата прошла"; document.title="Оплата прошла — MANAKAI"; }
+  else if(q.get("fail")){ h.textContent="Не получилось оплатить"; document.title="Не получилось оплатить — MANAKAI"; }
+})();
+</script>
 </body>
 </html>
