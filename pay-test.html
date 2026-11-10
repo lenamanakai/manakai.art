@@ -87,6 +87,10 @@
   form input.bad{border-color:var(--mark);}
   .done h2{font-family:var(--disp);font-weight:700;letter-spacing:-.03em;font-size:1.6rem;line-height:1.1;}
   .done p{font-family:var(--text);font-weight:300;font-size:14px;line-height:1.55;color:var(--grey);margin-top:10px;}
+  button.go.busy{background:var(--mark);color:#fff;cursor:progress;display:flex;align-items:center;justify-content:center;gap:10px;}
+  button.go.busy::before{content:"";width:13px;height:13px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;
+    border-radius:50%;animation:gospin .7s linear infinite;}
+  @keyframes gospin{to{transform:rotate(360deg);}}
 </style>
 </head>
 <body>
@@ -303,7 +307,7 @@
       note(bad===fields.name?"Укажите имя и фамилию":bad===fields.email?"Проверьте почту — на неё придёт чек":"Проверьте телефон", true);
       return;
     }
-    go.disabled=true; var label=go.textContent; go.textContent="Переходим к оплате…";
+    go.disabled=true; var label=go.textContent; go.textContent="Переходим к оплате"; go.classList.add("busy");
     var body={
       product:cur().value, promo:promo.totals[cur().value]?promo.code:"",
       name:fields.name.value.trim(), email:fields.email.value.trim(), phone:fields.phone.value.trim(),
@@ -316,11 +320,11 @@
         if(r.ok && r.url){ location.href=r.url; return; }
         if(r.field && fields[r.field]) fields[r.field].classList.add("bad");
         note((r.error||"Не получилось создать платёж")+'. Если повторится — напишите в '+TG, true);
-        go.disabled=false; go.textContent=label;
+        go.disabled=false; go.textContent=label; go.classList.remove("busy");
       })
       .catch(function(){
         note('Не получилось связаться с банком. Попробуйте ещё раз через минуту или напишите в '+TG, true);
-        go.disabled=false; go.textContent=label;
+        go.disabled=false; go.textContent=label; go.classList.remove("busy");
       });
   });
 })();
