@@ -1,5 +1,6 @@
 User-agent: *
 Disallow: /pay
+Disallow: /admin
 Disallow: /pay-test
 Disallow: /a/index.html
 Disallow: /a/offer.html

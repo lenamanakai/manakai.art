@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Пульт — MANAKAI</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Lato:wght@300;400&display=swap">
+<link rel="stylesheet" href="style.css">
+<style>
+  body{padding-top:0;background:var(--paper);}
+  .wrap{max-width:1080px;margin:0 auto;padding:clamp(22px,4vw,48px) var(--g) 80px;}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    padding-bottom:16px;border-bottom:1px solid var(--ink);}
+  .top .t{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;}
+  .top h1{font-family:var(--disp);font-weight:700;letter-spacing:-.04em;font-size:clamp(1.6rem,4vw,2.4rem);text-transform:uppercase;margin:0;}
+  .mono{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;}
+  .grey{color:var(--grey);}
+  .pink{color:var(--mark);}
+  section{margin-top:clamp(30px,5vw,54px);}
+  h2{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
+    margin:0 0 14px;padding-bottom:8px;border-bottom:1px solid var(--hair);}
+  .card{background:var(--white);border:1px solid var(--hair);padding:clamp(14px,2vw,22px);}
+  label.f{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--grey);}
+  input[type=text],input[type=password],input[type=number],input[type=date],select{
+    width:100%;margin-top:6px;padding:10px 11px;border:1px solid var(--hair);background:var(--paper);
+    font-family:var(--mono);font-size:13px;color:var(--ink);border-radius:0;-webkit-appearance:none;appearance:none;}
+  input:focus,select:focus{outline:none;border-color:var(--mark);}
+  .grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;}
+  .grid .w2{grid-column:span 2;}
+  @media (max-width:760px){ .grid{grid-template-columns:1fr 1fr;} .grid .w2{grid-column:span 2;} }
+  .btn{display:inline-flex;align-items:center;justify-content:center;border:0;cursor:pointer;background:var(--mark);color:#fff;
+    padding:11px 16px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;}
+  .btn.ghost{background:none;color:var(--ink);box-shadow:inset 0 0 0 1px var(--hair);}
+  .btn.ghost:hover{box-shadow:inset 0 0 0 1px var(--ink);}
+  .btn.sm{padding:7px 10px;font-size:9.5px;}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .link{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:12px 0;border-bottom:1px solid var(--hair);}
+  .link:last-child{border-bottom:0;}
+  .link .k{min-width:170px;}
+  .link code{font-family:var(--mono);font-size:12px;word-break:break-all;flex:1 1 260px;}
+  table{width:100%;border-collapse:collapse;}
+  th{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--grey);font-weight:500;
+    text-align:left;padding:8px 8px;border-bottom:1px solid var(--hair);}
+  td{font-family:var(--mono);font-size:12.5px;padding:10px 8px;border-bottom:1px solid var(--hair);vertical-align:middle;}
+  td .note{display:block;font-family:var(--text);font-size:12px;color:var(--grey);margin-top:3px;}
+  tr.off td{opacity:.45;}
+  tr.off td.act{opacity:1;}
+  .st{display:inline-flex;align-items:center;gap:6px;}
+  .st::before{content:"";width:7px;height:7px;border-radius:50%;background:#2fb36b;}
+  tr.off .st::before{background:var(--soft);}
+  td.act{white-space:nowrap;text-align:right;}
+  @media (max-width:760px){
+    table,tbody,tr,td{display:block;width:100%;}
+    thead{display:none;}
+    tr{border:1px solid var(--hair);background:var(--white);margin-bottom:10px;padding:6px 4px;}
+    td{border:0;padding:5px 8px;}
+    td[data-l]::before{content:attr(data-l);display:inline-block;min-width:96px;font-size:9.5px;letter-spacing:.12em;
+      text-transform:uppercase;color:var(--grey);}
+    td.act{text-align:left;}
+  }
+  .msg{font-family:var(--text);font-size:13px;margin-top:10px;min-height:1.2em;}
+  .msg.err{color:var(--mark);}
+  .login{max-width:360px;margin:12vh auto 0;}
+  .empty{font-family:var(--text);font-size:13.5px;color:var(--grey);padding:10px 0;}
+  .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;
+    font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:0;transition:opacity .25s;pointer-events:none;}
+  .toast.on{opacity:1;}
+</style>
+</head>
+<body>
+
+<div class="wrap" id="loginBox" hidden>
+  <div class="login card">
+    <span class="mono pink">MANAKAI · пульт</span>
+    <form id="lf" style="margin-top:16px;">
+      <label class="f" for="pw">Пароль</label>
+      <input id="pw" type="password" autocomplete="current-password" required>
+      <button class="btn" type="submit" style="width:100%;margin-top:14px;">Войти</button>
+      <p class="msg err" id="lm"></p>
+    </form>
+  </div>
+</div>
+
+<div class="wrap" id="app" hidden>
+  <div class="top">
+    <div class="t"><h1>Пульт</h1><span class="mono grey" id="term"></span></div>
+    <button class="btn ghost sm" id="logout" type="button">Выйти</button>
+  </div>
+
+  <section>
+    <h2>Ссылки на оплату</h2>
+    <div class="card">
+      <div class="link"><span class="mono k">Полная цена</span><code id="lFull"></code><button class="btn ghost sm" data-copy="lFull" type="button">Копировать</button></div>
+      <div class="link"><span class="mono k">Бронь места</span><code id="lBook"></code><button class="btn ghost sm" data-copy="lBook" type="button">Копировать</button></div>
+      <div class="grid" style="margin-top:14px;">
+        <div class="w2"><label class="f" for="bp">Сумма брони, ₽</label><input id="bp" type="number" min="100" step="100"></div>
+        <div class="w2"><label class="f" for="ak">Ключ ссылок</label><input id="ak" type="text" autocomplete="off" spellcheck="false"></div>
+        <div class="w2" style="display:flex;align-items:flex-end;gap:8px;">
+          <button class="btn ghost" id="newKey" type="button">Новый ключ</button>
+          <button class="btn" id="saveSet" type="button">Сохранить</button>
+        </div>
+      </div>
+      <p class="msg grey" style="font-size:12px;">Новый ключ отключает все старые ссылки «Полная цена» и «Бронь». Ссылки с промокодами работают отдельно</p>
+    </div>
+  </section>
+
+  <section>
+    <h2 id="formTitle">Новый промокод</h2>
+    <div class="card">
+      <form id="pf">
+        <div class="grid">
+          <div><label class="f" for="fc">Код</label><input id="fc" type="text" placeholder="NASTYA10" autocomplete="off" spellcheck="false" style="text-transform:uppercase;"></div>
+          <div><label class="f" for="fo">Скидка</label><input id="fo" type="text" placeholder="10000 или 15%" autocomplete="off"></div>
+          <div><label class="f" for="ft">Тариф</label><select id="ft"><option value="">Любой</option><option value="standard">Standard</option><option value="vip">VIP</option></select></div>
+          <div><label class="f" for="fu">Действует до</label><input id="fu" type="date"></div>
+          <div><label class="f" for="fl">Лимит, чел.</label><input id="fl" type="number" min="0" placeholder="без лимита"></div>
+          <div><label class="f" for="fn">Кому выдан</label><input id="fn" type="text" placeholder="блог Насти" autocomplete="off"></div>
+        </div>
+        <div class="row" style="margin-top:14px;">
+          <button class="btn" type="submit" id="saveBtn">Добавить</button>
+          <button class="btn ghost" type="button" id="cancelEdit" hidden>Отмена</button>
+        </div>
+        <p class="msg" id="pmsg"></p>
+      </form>
+    </div>
+  </section>
+
+  <section>
+    <h2>Промокоды</h2>
+    <table id="pt">
+      <thead><tr><th>Код</th><th>Скидка</th><th>Тариф</th><th>До</th><th>Оплат</th><th>Статус</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <p class="empty" id="pe" hidden>Промокодов пока нет</p>
+  </section>
+
+  <section>
+    <h2>Оплаты</h2>
+    <table id="ot">
+      <thead><tr><th>Дата</th><th>Что</th><th>Сумма</th><th>Промокод</th><th>Статус</th><th>Заказ</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <p class="empty" id="oe" hidden>Оплат пока нет. Данные покупателей — в кабинете Т-Банка по номеру заказа</p>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var API = "https://functions.yandexcloud.net/d4erph8dmv5uremr5sa0";
+  var SITE = "https://manakai.art";
+  var KEY = "mk_admin_pw";
+  var pw = "", state = null, editing = null;
+  var $ = function(id){ return document.getElementById(id); };
+
+  function store(v){ try{ if(v===null) localStorage.removeItem(KEY); else localStorage.setItem(KEY, v); }catch(e){} }
+  function stored(){ try{ return localStorage.getItem(KEY) || ""; }catch(e){ return ""; } }
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+  function rub(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g," ")+" ₽"; }
+  function toast(t){ var e=$("toast"); e.textContent=t; e.classList.add("on"); clearTimeout(toast.t); toast.t=setTimeout(function(){ e.classList.remove("on"); },1600); }
+  function copy(text){
+    (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function(){ toast("Скопировано"); })
+      .catch(function(){ var t=document.createElement("textarea"); t.value=text; document.body.appendChild(t); t.select(); try{ document.execCommand("copy"); toast("Скопировано"); }catch(e){} t.remove(); });
+  }
+  function dateRu(iso){
+    if(!iso) return "—";
+    var d=new Date(iso); if(isNaN(d)) return iso;
+    return d.toLocaleString("ru-RU",{timeZone:"Europe/Moscow",day:"2-digit",month:"2-digit",year:"2-digit",hour:"2-digit",minute:"2-digit"});
+  }
+  function day(s){ if(!s) return "без срока"; var p=s.split("-"); return p[2]+"."+p[1]+"."+p[0].slice(2); }
+  function offTxt(o){ return /%$/.test(o) ? o : rub(+o); }
+  function tariffTxt(t){ return t==="vip" ? "VIP" : t==="standard" ? "Standard" : "любой"; }
+  function today(){ return new Date(Date.now()+3*3600e3).toISOString().slice(0,10); }
+
+  function call(body){
+    body.pw = pw;
+    return fetch(API+"?a=admin", { method:"POST", headers:{"Content-Type":"text/plain"}, body: JSON.stringify(body) })
+      .then(function(r){ return r.json().then(function(j){ j._status=r.status; return j; }); });
+  }
+
+  /* ---------- вход ---------- */
+  function showLogin(err){ $("app").hidden=true; $("loginBox").hidden=false; $("lm").textContent=err||""; $("pw").focus(); }
+  function enter(p){
+    pw=p; $("lm").textContent="";
+    call({op:"state"}).then(function(r){
+      if(r._status===401){ store(null); showLogin("Неверный пароль"); return; }
+      if(!r.ok){ showLogin(r.error||"Пульт не отвечает"); return; }
+      store(pw); $("loginBox").hidden=true; $("app").hidden=false; render(r);
+    }).catch(function(){ showLogin("Нет связи с пультом, попробуйте ещё раз"); });
+  }
+  $("lf").addEventListener("submit", function(e){ e.preventDefault(); enter($("pw").value); });
+  $("logout").addEventListener("click", function(){ store(null); pw=""; $("pw").value=""; showLogin(""); });
+
+  /* ---------- отрисовка ---------- */
+  function render(r){
+    state=r;
+    $("term").textContent = "терминал: "+r.terminal;
+    var k=r.settings.accessKey||"";
+    $("ak").value=k; $("bp").value=r.settings.bookingPrice;
+    $("lFull").textContent = k ? SITE+"/pay?k="+k : "задайте ключ ссылок ниже";
+    $("lBook").textContent = k ? SITE+"/pay?product=booking&k="+k : "задайте ключ ссылок ниже";
+
+    var tb=$("pt").querySelector("tbody"); tb.innerHTML="";
+    $("pe").hidden = r.promos.length>0;
+    r.promos.forEach(function(p){
+      var expired = p.until && p.until < today();
+      var full = p.limit && p.used >= p.limit;
+      var status = !p.active ? "остановлен" : expired ? "срок вышел" : full ? "лимит исчерпан" : "активен";
+      var tr=document.createElement("tr"); if(status!=="активен") tr.className="off";
+      tr.innerHTML =
+        '<td data-l="Код"><b>'+esc(p.code)+'</b>'+(p.note?'<span class="note">'+esc(p.note)+'</span>':'')+'</td>'+
+        '<td data-l="Скидка">'+esc(offTxt(p.off))+'</td>'+
+        '<td data-l="Тариф">'+tariffTxt(p.only)+'</td>'+
+        '<td data-l="До">'+day(p.until)+'</td>'+
+        '<td data-l="Оплат">'+p.used+(p.limit?' / '+p.limit:'')+'</td>'+
+        '<td data-l="Статус"><span class="st">'+status+'</span></td>'+
+        '<td class="act"><div class="row" style="justify-content:inherit;gap:6px;">'+
+          '<button class="btn ghost sm" data-a="link" type="button">Ссылка</button>'+
+          '<button class="btn ghost sm" data-a="toggle" type="button">'+(p.active?'Стоп':'Включить')+'</button>'+
+          '<button class="btn ghost sm" data-a="edit" type="button">Изменить</button>'+
+          '<button class="btn ghost sm" data-a="del" type="button">Удалить</button>'+
+        '</div></td>';
+      tr.querySelector('[data-a=link]').onclick=function(){ copy(SITE+"/pay?promo="+p.code); };
+      tr.querySelector('[data-a=toggle]').onclick=function(){ act({op:"togglePromo", code:p.code}, p.active?"Код остановлен":"Код включён"); };
+      tr.querySelector('[data-a=edit]').onclick=function(){ edit(p); };
+      var del=tr.querySelector('[data-a=del]');
+      del.onclick=function(){
+        if(del.dataset.sure){ act({op:"deletePromo", code:p.code}, "Код удалён"); return; }
+        del.dataset.sure="1"; del.textContent="Точно?"; del.style.color="var(--mark)";
+        setTimeout(function(){ delete del.dataset.sure; del.textContent="Удалить"; del.style.color=""; },3000);
+      };
+      tb.appendChild(tr);
+    });
+
+    var ob=$("ot").querySelector("tbody"); ob.innerHTML="";
+    var orders=(r.orders||[]);
+    $("oe").hidden = orders.length>0;
+    orders.forEach(function(o){
+      var what = o.product==="vip"?"VIP":o.product==="standard"?"Standard":o.product==="booking"?"Бронь":o.product;
+      var st = o.status==="CONFIRMED"?"оплачено":/REFUND|REVERS/.test(o.status)?"возврат":o.status;
+      var tr=document.createElement("tr"); if(st!=="оплачено") tr.className="off";
+      tr.innerHTML =
+        '<td data-l="Дата">'+dateRu(o.date)+'</td>'+
+        '<td data-l="Что">'+esc(what)+(o.test?' <span class="grey">· тест</span>':'')+'</td>'+
+        '<td data-l="Сумма">'+rub(o.amount)+'</td>'+
+        '<td data-l="Промокод">'+esc(o.code||"—")+'</td>'+
+        '<td data-l="Статус"><span class="st">'+st+'</span></td>'+
+        '<td data-l="Заказ" class="grey" style="font-size:11px;">'+esc(o.id)+'</td>';
+      ob.appendChild(tr);
+    });
+  }
+
+  function act(body, ok){
+    return call(body).then(function(r){
+      if(!r.ok){ toast(r.error||"Ошибка"); return r; }
+      render(r); if(ok) toast(ok); return r;
+    }).catch(function(){ toast("Нет связи с пультом"); });
+  }
+
+  /* ---------- ссылки и настройки ---------- */
+  document.querySelectorAll("[data-copy]").forEach(function(b){
+    b.onclick=function(){ var t=$(b.dataset.copy).textContent; if(/^https:/.test(t)) copy(t); };
+  });
+  $("newKey").onclick=function(){
+    var a="abcdefghjkmnpqrstuvwxyz23456789", s=""; for(var i=0;i<8;i++) s+=a[Math.floor(Math.random()*a.length)];
+    $("ak").value=s; toast("Нажмите «Сохранить»");
+  };
+  $("saveSet").onclick=function(){ act({op:"saveSettings", bookingPrice:$("bp").value, accessKey:$("ak").value.trim()}, "Сохранено"); };
+
+  /* ---------- промокоды ---------- */
+  function resetForm(){
+    editing=null; $("pf").reset(); $("fc").disabled=false;
+    $("formTitle").textContent="Новый промокод"; $("saveBtn").textContent="Добавить"; $("cancelEdit").hidden=true; $("pmsg").textContent="";
+  }
+  function edit(p){
+    editing=p.code; $("fc").value=p.code; $("fc").disabled=true; $("fo").value=p.off; $("ft").value=p.only||"";
+    $("fu").value=p.until||""; $("fl").value=p.limit||""; $("fn").value=p.note||"";
+    $("formTitle").textContent="Изменить "+p.code; $("saveBtn").textContent="Сохранить"; $("cancelEdit").hidden=false;
+    $("pf").scrollIntoView({behavior:"smooth", block:"center"});
+  }
+  $("cancelEdit").onclick=resetForm;
+  $("pf").addEventListener("submit", function(e){
+    e.preventDefault();
+    var code=($("fc").value||"").trim().toUpperCase().replace(/[^A-Z0-9_]/g,"");
+    if(!code){ $("pmsg").className="msg err"; $("pmsg").textContent="Код — латинские буквы и цифры, например NASTYA10"; return; }
+    if(!editing && state && state.promos.some(function(p){ return p.code===code; })){ $("pmsg").className="msg err"; $("pmsg").textContent="Такой код уже есть — нажмите «Изменить» в таблице"; return; }
+    var prev = editing && state ? state.promos.filter(function(p){ return p.code===editing; })[0] : null;
+    act({op:"savePromo", code:code, off:$("fo").value, only:$("ft").value, until:$("fu").value, limit:$("fl").value, note:$("fn").value,
+         active: prev ? prev.active : true}, editing?"Сохранено":"Код добавлен")
+      .then(function(r){ if(r && r.ok) resetForm(); else if(r){ $("pmsg").className="msg err"; $("pmsg").textContent=r.error||""; } });
+  });
+
+  var saved=stored();
+  if(saved) enter(saved); else showLogin("");
+})();
+</script>
+</body>
+</html>
