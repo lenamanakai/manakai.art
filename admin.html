@@ -140,11 +140,17 @@
 
   <section>
     <h2>Оплаты</h2>
+    <div class="row" style="margin-bottom:12px;justify-content:space-between;">
+      <label class="mono grey" style="display:flex;gap:8px;align-items:center;cursor:pointer;">
+        <input type="checkbox" id="showAll" style="accent-color:var(--mark);"> Показать неоплаченные попытки</label>
+      <button class="btn ghost sm" id="csv" type="button">Скачать список (Excel)</button>
+    </div>
     <table id="ot">
-      <thead><tr><th>Дата</th><th>Что</th><th>Сумма</th><th>Промокод</th><th>Статус</th><th>Заказ</th></tr></thead>
+      <thead><tr><th>Дата</th><th>Покупатель</th><th>Что</th><th>Сумма</th><th>Промокод</th><th>Статус</th></tr></thead>
       <tbody></tbody>
     </table>
-    <p class="empty" id="oe" hidden>Оплат пока нет. Данные покупателей — в кабинете Т-Банка по номеру заказа</p>
+    <p class="empty" id="oe" hidden>Оплат пока нет</p>
+    <p class="msg grey" style="font-size:12px;">Контакты покупателей хранятся в вашем Яндекс Облаке и видны только здесь. Номер заказа — для поиска оплаты в кабинете Т-Банка</p>
   </section>
 </div>
 
@@ -237,23 +243,46 @@
       tb.appendChild(tr);
     });
 
+    renderOrders();
+  }
+
+  function stName(o){
+    return o.status==="CONFIRMED"?"оплачено":/REFUND|REVERS/.test(o.status)?"возврат":o.status==="REJECTED"?"отклонено":o.status==="NEW"?"не оплачено":o.status;
+  }
+  function whatName(p){ return p==="vip"?"VIP":p==="standard"?"Standard":p==="booking"?"Бронь":p; }
+  function renderOrders(){
+    if(!state) return;
+    var all=$("showAll").checked;
     var ob=$("ot").querySelector("tbody"); ob.innerHTML="";
-    var orders=(r.orders||[]);
+    var orders=(state.orders||[]).filter(function(o){ return all || o.status!=="NEW" && o.status!=="REJECTED"; });
     $("oe").hidden = orders.length>0;
     orders.forEach(function(o){
-      var what = o.product==="vip"?"VIP":o.product==="standard"?"Standard":o.product==="booking"?"Бронь":o.product;
-      var st = o.status==="CONFIRMED"?"оплачено":/REFUND|REVERS/.test(o.status)?"возврат":o.status;
+      var st=stName(o);
       var tr=document.createElement("tr"); if(st!=="оплачено") tr.className="off";
+      var who = o.name ? '<b style="font-weight:500;">'+esc(o.name)+'</b>' : '<span class="grey">—</span>';
+      var cont = (o.email?'<span class="note">'+esc(o.email)+'</span>':'')+(o.phone?'<span class="note">'+esc(o.phone)+'</span>':'')+
+                 (o.news?'<span class="note pink">согласие на рассылку</span>':'');
       tr.innerHTML =
-        '<td data-l="Дата">'+dateRu(o.date)+'</td>'+
-        '<td data-l="Что">'+esc(what)+(o.test?' <span class="grey">· тест</span>':'')+'</td>'+
+        '<td data-l="Дата">'+dateRu(o.date)+'<span class="note">'+esc(o.id)+'</span></td>'+
+        '<td data-l="Покупатель">'+who+cont+'</td>'+
+        '<td data-l="Что">'+esc(whatName(o.product))+(o.test?' <span class="grey">· тест</span>':'')+'</td>'+
         '<td data-l="Сумма">'+rub(o.amount)+'</td>'+
         '<td data-l="Промокод">'+esc(o.code||"—")+'</td>'+
-        '<td data-l="Статус"><span class="st">'+st+'</span></td>'+
-        '<td data-l="Заказ" class="grey" style="font-size:11px;">'+esc(o.id)+'</td>';
+        '<td data-l="Статус"><span class="st">'+st+'</span></td>';
       ob.appendChild(tr);
     });
   }
+  $("showAll").addEventListener("change", renderOrders);
+  $("csv").addEventListener("click", function(){
+    if(!state) return;
+    var rows=[["Дата","Имя","Почта","Телефон","Согласие на рассылку","Что","Сумма","Промокод","Статус","Заказ"]];
+    (state.orders||[]).forEach(function(o){
+      rows.push([dateRu(o.date), o.name||"", o.email||"", o.phone||"", o.news?"да":"", whatName(o.product), o.amount, o.code||"", stName(o), o.id]);
+    });
+    var csv="\ufeff"+rows.map(function(r){ return r.map(function(v){ v=String(v==null?"":v); return /[";\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; }).join(";"); }).join("\r\n");
+    var a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
+    a.download="manakai-oplaty-"+new Date().toISOString().slice(0,10)+".csv"; document.body.appendChild(a); a.click(); a.remove();
+  });
 
   function act(body, ok){
     return call(body).then(function(r){
