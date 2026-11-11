@@ -150,7 +150,7 @@
       <tbody></tbody>
     </table>
     <p class="empty" id="oe" hidden>Оплат пока нет</p>
-    <p class="msg grey" style="font-size:12px;">Контакты покупателей хранятся в вашем Яндекс Облаке и видны только здесь. Номер заказа — для поиска оплаты в кабинете Т-Банка</p>
+    <p class="msg grey" style="font-size:12px;">Контакты покупателей хранятся в вашем Яндекс Облаке и видны только здесь. По номеру заказа оплату можно найти в кабинете Т-Банка</p>
   </section>
 </div>
 
@@ -263,7 +263,7 @@
       var cont = (o.email?'<span class="note">'+esc(o.email)+'</span>':'')+(o.phone?'<span class="note">'+esc(o.phone)+'</span>':'')+
                  (o.news?'<span class="note pink">согласие на рассылку</span>':'');
       tr.innerHTML =
-        '<td data-l="Дата">'+dateRu(o.date)+'<span class="note">'+esc(o.id)+'</span></td>'+
+        '<td data-l="Дата">'+dateRu(o.date)+'<span class="note">'+(/^\d+$/.test(o.id)?'№ '+esc(o.id):esc(o.id))+'</span></td>'+
         '<td data-l="Покупатель">'+who+cont+'</td>'+
         '<td data-l="Что">'+esc(whatName(o.product))+(o.test?' <span class="grey">· тест</span>':'')+'</td>'+
         '<td data-l="Сумма">'+rub(o.amount)+'</td>'+

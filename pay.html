@@ -94,19 +94,20 @@
   @keyframes gospin{to{transform:rotate(360deg);}}
   html.gating .pay{visibility:hidden;}
   body.closed .pay{display:none;}
-  .gate-closed{margin-top:clamp(26px,4vw,44px);max-width:46ch;}
-  .gate-closed p{font-family:var(--text);font-weight:300;font-size:15px;line-height:1.55;color:var(--grey);}
-  .gate-closed .gc-btn{display:inline-flex;margin-top:18px;background:var(--mark);color:#fff;padding:14px 20px;
+  .gate-closed{margin-top:clamp(26px,4vw,44px);max-width:40ch;}
+  .gate-closed p{font-family:var(--text);font-weight:400;font-size:clamp(17px,1.7vw,20px);line-height:1.5;color:var(--ink);}
+  .gate-closed .gc-btn{display:inline-flex;margin-top:24px;background:var(--mark);color:#fff;padding:14px 20px;
     font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;}
   .tariff[hidden]{display:none;}
-  .gc-code{margin-top:22px;}
-  .gc-code label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--grey);}
+  form.gc-code{margin-top:clamp(30px,4.5vw,46px);position:static;max-width:420px;}
+  .gc-code label{display:inline-block;background:var(--mark);color:#fff;padding:7px 11px;font-family:var(--mono);
+    font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;}
   .gc-code div{display:flex;gap:8px;margin-top:7px;max-width:380px;}
   .gc-code input{flex:1;min-width:0;padding:11px 12px;border:1px solid var(--hair);background:var(--white);
     font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);}
   .gc-code input:focus{outline:none;border-color:var(--mark);}
-  .gc-code button{flex:none;padding:0 16px;border:1px solid var(--ink);background:none;cursor:pointer;
-    font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink);}
+  .gc-code button{flex:none;padding:0 16px;border:1px solid var(--mark);background:none;cursor:pointer;
+    font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--mark);}
   .gc-code[hidden]{display:none;}
 </style>
 <!-- Yandex.Metrika counter -->
@@ -140,11 +141,11 @@
   <h1 class="disp" id="ph">Оплата<br>участия</h1>
   <div class="gate-closed" id="gc" hidden>
     <p id="gct">Набор в группу формируется по результатам интервью с Леной. Мест немного, и я хочу быть уверена, что мы подходим друг другу. Напишите в Telegram, чтобы познакомиться — Лена ответит лично.</p>
+    <a class="gc-btn" id="gcb" href="https://t.me/lenamanakai?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%BE%D0%BF%D0%BB%D0%B0%D1%82%D0%B8%D1%82%D1%8C%20%D1%83%D1%87%D0%B0%D1%81%D1%82%D0%B8%D0%B5%20%D0%B2%20M%E2%80%99AI%2C%20%D0%BF%D0%BE%D1%82%D0%BE%D0%BA%2003" target="_blank" rel="noopener">Написать в Telegram</a>
     <form class="gc-code" id="gcf" autocomplete="off">
       <label for="gcc">Есть промокод</label>
       <div><input id="gcc" type="text" autocapitalize="characters" spellcheck="false" placeholder="Промокод"><button type="submit">Открыть</button></div>
     </form>
-    <a class="gc-btn" id="gcb" href="https://t.me/lenamanakai?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%BE%D0%BF%D0%BB%D0%B0%D1%82%D0%B8%D1%82%D1%8C%20%D1%83%D1%87%D0%B0%D1%81%D1%82%D0%B8%D0%B5%20%D0%B2%20M%E2%80%99AI%2C%20%D0%BF%D0%BE%D1%82%D0%BE%D0%BA%2003" target="_blank" rel="noopener">Написать в Telegram</a>
   </div>
 
   <div class="pay">
@@ -283,7 +284,15 @@
     }
     html.classList.remove("gating");
   }
-  if(qs.get("paid")){ closeView(BOOKING?"Место<br>забронировано":"Оплата<br>прошла", "Электронный чек придёт на почту. Если что-то не пришло, напишите в Telegram", false); return; }
+  if(qs.get("paid")){
+    var ord=(qs.get("o")||"").replace(/[^A-Za-z0-9-]/g,"");
+    document.querySelector("main .kicker").textContent="M’AI · поток 03"+(ord?" · заказ № "+ord:"");
+    closeView(BOOKING?"Место<br>забронировано":"Добро пожаловать<br>в M’AI",
+      (BOOKING?"Бронь оплачена, чек придёт на почту. ":"Оплата прошла, чек придёт на почту. ")+
+      "В течение рабочего дня Лена напишет вам в Telegram или на почту: расскажет о старте потока и пришлёт всё необходимое. Хотите быстрее — напишите сами", false);
+    gcb.href="https://t.me/lenamanakai?text="+encodeURIComponent("Здравствуйте! Я оплатил(а) "+(BOOKING?"бронь места":"участие")+" в M’AI, поток 03"+(ord?", заказ № "+ord:""));
+    return;
+  }
   if(qs.get("fail")){ closeView("Не получилось<br>оплатить", "Можно попробовать ещё раз по той же ссылке или написать в Telegram", false); return; }
   if(!qs.get("k") && !qs.get("promo")){ closeView(null, "Набор в группу формируется по результатам интервью с Леной. Мест немного, и я хочу быть уверена, что мы подходим друг другу. Напишите в Telegram, чтобы познакомиться — Лена ответит лично.", false); return; }
   /* страница открывается сразу, проверка ссылки идёт параллельно — без ожидания */
