@@ -99,6 +99,15 @@
   .gate-closed .gc-btn{display:inline-flex;margin-top:18px;background:var(--mark);color:#fff;padding:14px 20px;
     font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;}
   .tariff[hidden]{display:none;}
+  .gc-code{margin-top:22px;}
+  .gc-code label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--grey);}
+  .gc-code div{display:flex;gap:8px;margin-top:7px;max-width:380px;}
+  .gc-code input{flex:1;min-width:0;padding:11px 12px;border:1px solid var(--hair);background:var(--white);
+    font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);}
+  .gc-code input:focus{outline:none;border-color:var(--mark);}
+  .gc-code button{flex:none;padding:0 16px;border:1px solid var(--ink);background:none;cursor:pointer;
+    font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink);}
+  .gc-code[hidden]{display:none;}
 </style>
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
@@ -131,6 +140,10 @@
   <h1 class="disp" id="ph">Оплата<br>участия</h1>
   <div class="gate-closed" id="gc" hidden>
     <p id="gct">Оплата по личной ссылке</p>
+    <form class="gc-code" id="gcf" autocomplete="off">
+      <label for="gcc">Есть промокод</label>
+      <div><input id="gcc" type="text" autocapitalize="characters" spellcheck="false" placeholder="Промокод"><button type="submit">Открыть</button></div>
+    </form>
     <a class="gc-btn" id="gcb" href="https://t.me/lenamanakai?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%BE%D0%BF%D0%BB%D0%B0%D1%82%D0%B8%D1%82%D1%8C%20%D1%83%D1%87%D0%B0%D1%81%D1%82%D0%B8%D0%B5%20%D0%B2%20M%E2%80%99AI%2C%20%D0%BF%D0%BE%D1%82%D0%BE%D0%BA%2003" target="_blank" rel="noopener">Написать в Telegram</a>
   </div>
 
@@ -235,12 +248,28 @@
   var html=document.documentElement, gc=document.getElementById("gc"), gct=document.getElementById("gct"),
       gcb=document.getElementById("gcb"), ph=document.getElementById("ph");
   var BOOKING = qs.get("product")==="booking";
+  document.getElementById("gcf").addEventListener("submit", function(e){
+    e.preventDefault();
+    var c=document.getElementById("gcc").value.trim().toUpperCase().replace(/[^A-Z0-9_]/g,"");
+    if(c) location.href="pay.html?promo="+encodeURIComponent(c);
+  });
   function closeView(title, text, hideBtn){
     html.classList.remove("gating"); document.body.classList.add("closed");
+    document.getElementById("gcf").hidden = !!(qs.get("paid")||qs.get("fail"));
     if(title) ph.innerHTML=title;
     gct.textContent=text; gc.hidden=false; if(hideBtn) gcb.hidden=true;
   }
   function openView(info){
+    var bk=radios.filter(function(r){ return r.value==="booking"; })[0];
+    if(bk && info && info.bookingPrice){ bk.dataset.price=info.bookingPrice; }
+    if(bk && !BOOKING){
+      bk.closest(".tariff").hidden=false;
+      /* бронь: промокод к ней не применяется — прячем поле, пока выбрана бронь */
+      radios.forEach(function(r){ r.addEventListener("change", function(){
+        var pb=document.getElementById("promo"); pb.style.display = bk.checked ? "none" : "";
+      }); });
+      apply();
+    }
     if(BOOKING){
       radios.forEach(function(r){ var l=r.closest(".tariff"); l.hidden = r.value!=="booking"; r.checked = r.value==="booking"; });
       var b=radios.filter(function(r){ return r.value==="booking"; })[0];
@@ -257,7 +286,7 @@
   if(!qs.get("k") && !qs.get("promo")){ closeView(null, "Оплата по личной ссылке", false); return; }
   fetch(PAY_API+"?a=access&k="+encodeURIComponent(qs.get("k")||"")+"&c="+encodeURIComponent(qs.get("promo")||""))
     .then(function(r){ return r.json(); })
-    .then(function(r){ if(r.ok) openView(r); else closeView(null, "Ссылка больше не действует. Напишите в Telegram, пришлю новую", false); })
+    .then(function(r){ if(r.ok) openView(r); else closeView(null, qs.get("promo") ? "Промокод не подошёл или закончился. Напишите в Telegram" : "Ссылка больше не действует. Напишите в Telegram, пришлю новую", false); })
     .catch(function(){ openView(null); });
 
   function fmt(n){ return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g," ")+" ₽"; }
