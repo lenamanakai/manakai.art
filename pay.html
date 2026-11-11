@@ -71,10 +71,10 @@
   .after{font-family:var(--text);font-weight:300;font-size:12px;line-height:1.5;color:var(--grey);margin-top:12px;}
   .ph{display:inline-block;border:1px solid var(--mark);color:var(--mark);padding:1px 6px;
     font-family:var(--mono);font-size:10px;letter-spacing:.08em;}
-  .promo{margin-top:18px;}
-  .promo .pl{background:none;border:0;padding:0;cursor:pointer;font-family:var(--mono);font-size:10px;
-    letter-spacing:.13em;text-transform:uppercase;color:var(--grey);text-decoration:underline;text-underline-offset:3px;}
-  .promo .pl:hover{color:var(--ink);}
+  .promo{margin-top:16px;}
+  .promo .pl{display:inline-block;background:var(--mark);border:0;padding:7px 11px;cursor:default;font-family:var(--mono);
+    font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#fff;}
+  .promo .pa{border-color:var(--mark)!important;color:var(--mark)!important;font-weight:600;}
   .promo .prow{display:flex;gap:8px;margin-top:8px;}
   .promo .prow[hidden]{display:none;}
   .promo input{flex:1;min-width:0;padding:10px 11px;border:1px solid var(--hair);background:var(--paper);
@@ -167,6 +167,15 @@
         </label>
       </div>
 
+      <div class="promo" id="promo" hidden>
+        <button type="button" class="pl" id="pt">Есть промокод</button>
+        <div class="prow" id="pw">
+          <input id="pc" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Промокод" placeholder="Промокод">
+          <button type="button" class="pa" id="pa">Применить</button>
+        </div>
+        <p class="pm" id="pm"></p>
+      </div>
+
       <dl class="facts">
         <div><dt>Услуга</dt><span class="v">Участие в онлайн-курсе M’AI (AI с Манакай), поток 03</span></div>
         <div><dt>Исполнитель</dt><span class="v">ИП Сарапульцева Елена Борисовна</span></div>
@@ -202,15 +211,6 @@
         <input type="checkbox" id="c3">
         <span>Хочу получать письма о новых потоках — <a href="newsletter.html">согласие на рассылку</a>, отписаться можно в один клик</span>
       </label>
-
-      <div class="promo" id="promo" hidden>
-        <button type="button" class="pl" id="pt">Есть промокод</button>
-        <div class="prow" id="pw" hidden>
-          <input id="pc" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Промокод" placeholder="Промокод">
-          <button type="button" class="pa" id="pa">Применить</button>
-        </div>
-        <p class="pm" id="pm"></p>
-      </div>
 
       <div class="total"><span class="k">К оплате</span><span class="v"><s id="old" hidden></s><span id="sum">77 000 ₽</span></span></div>
       <button class="go" type="submit">Перейти к оплате</button>
@@ -358,7 +358,6 @@
   }
   if(PAY_API){
     box.hidden=false;
-    pt.addEventListener("click", function(){ pw.hidden=!pw.hidden; if(!pw.hidden) pc.focus(); });
     pa.addEventListener("click", applyPromo);
     pc.addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); applyPromo(); } });
     /* промокод из ссылки: pay.html?promo=WEBINAR */
