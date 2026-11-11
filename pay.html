@@ -139,7 +139,7 @@
   <span class="kicker">M’AI · поток 03 · оплата участия</span>
   <h1 class="disp" id="ph">Оплата<br>участия</h1>
   <div class="gate-closed" id="gc" hidden>
-    <p id="gct">Набор в группу формируется по результатам интервью. Мест немного, и я хочу быть уверена, что мы подходим друг другу. Напишите мне в Telegram — договоримся о знакомстве</p>
+    <p id="gct">Набор в группу формируется по результатам интервью с Леной. Мест немного, и я хочу быть уверена, что мы подходим друг другу. Напишите в Telegram, чтобы познакомиться — Лена ответит лично.</p>
     <form class="gc-code" id="gcf" autocomplete="off">
       <label for="gcc">Есть промокод</label>
       <div><input id="gcc" type="text" autocapitalize="characters" spellcheck="false" placeholder="Промокод"><button type="submit">Открыть</button></div>
@@ -259,7 +259,9 @@
     if(title) ph.innerHTML=title;
     gct.textContent=text; gc.hidden=false; if(hideBtn) gcb.hidden=true;
   }
+  var opened=false;
   function openView(info){
+    if(opened) return; opened=true;
     var bk=radios.filter(function(r){ return r.value==="booking"; })[0];
     if(bk && info && info.bookingPrice){ bk.dataset.price=info.bookingPrice; }
     if(bk && !BOOKING){
@@ -283,11 +285,15 @@
   }
   if(qs.get("paid")){ closeView(BOOKING?"Место<br>забронировано":"Оплата<br>прошла", "Электронный чек придёт на почту. Если что-то не пришло, напишите в Telegram", false); return; }
   if(qs.get("fail")){ closeView("Не получилось<br>оплатить", "Можно попробовать ещё раз по той же ссылке или написать в Telegram", false); return; }
-  if(!qs.get("k") && !qs.get("promo")){ closeView(null, "Набор в группу формируется по результатам интервью. Мест немного, и я хочу быть уверена, что мы подходим друг другу. Напишите мне в Telegram — договоримся о знакомстве", false); return; }
+  if(!qs.get("k") && !qs.get("promo")){ closeView(null, "Набор в группу формируется по результатам интервью с Леной. Мест немного, и я хочу быть уверена, что мы подходим друг другу. Напишите в Telegram, чтобы познакомиться — Лена ответит лично.", false); return; }
+  /* страница открывается сразу, проверка ссылки идёт параллельно — без ожидания */
+  openView(null);
   fetch(PAY_API+"?a=access&k="+encodeURIComponent(qs.get("k")||"")+"&c="+encodeURIComponent(qs.get("promo")||""))
     .then(function(r){ return r.json(); })
-    .then(function(r){ if(r.ok) openView(r); else closeView(null, qs.get("promo") ? "Промокод не подошёл или закончился. Напишите в Telegram" : "Ссылка больше не действует. Напишите в Telegram, пришлю новую", false); })
-    .catch(function(){ openView(null); });
+    .then(function(r){ if(r.ok){ var bk=radios.filter(function(x){ return x.value==="booking"; })[0];
+        if(bk && r.bookingPrice && +bk.dataset.price!==+r.bookingPrice){ bk.dataset.price=r.bookingPrice; apply(); } }
+      else closeView(null, qs.get("promo") ? "Промокод не подошёл или закончился. Напишите в Telegram" : "Ссылка больше не действует. Напишите в Telegram, пришлю новую", false); })
+    .catch(function(){});
 
   function fmt(n){ return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g," ")+" ₽"; }
   function cur(){ var r=radios.filter(function(x){return x.checked;})[0]; return r||radios[0]; }
