@@ -261,7 +261,8 @@
       var tr=document.createElement("tr"); if(st!=="оплачено") tr.className="off";
       var who = o.name ? '<b style="font-weight:500;">'+esc(o.name)+'</b>' : '<span class="grey">—</span>';
       var cont = (o.email?'<span class="note">'+esc(o.email)+'</span>':'')+(o.phone?'<span class="note">'+esc(o.phone)+'</span>':'')+
-                 (o.news?'<span class="note pink">согласие на рассылку</span>':'');
+                 (o.news?'<span class="note pink">согласие на рассылку</span>':'')+
+                 (o.mailed?'<span class="note">✓ письмо отправлено</span>':o.mailError?'<span class="note pink">письмо не ушло</span>':'');
       tr.innerHTML =
         '<td data-l="Дата">'+dateRu(o.date)+'<span class="note">'+(/^\d+$/.test(o.id)?'№ '+esc(o.id):esc(o.id))+'</span></td>'+
         '<td data-l="Покупатель">'+who+cont+'</td>'+
