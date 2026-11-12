@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <script>document.documentElement.classList.add("gating");</script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Оплата — M’AI, поток 03 — MANAKAI</title>
+<title>Оплата — M’AI — MANAKAI</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="MANAKAI">
-<meta property="og:title" content="Оплата — M’AI, поток 03 — MANAKAI">
+<meta property="og:title" content="Оплата — M’AI — MANAKAI">
 <meta property="og:description" content="Оплата участия в потоке 03 курса M’AI. Лена Манакай, manakai.art">
 <meta property="og:url" content="https://manakai.art/pay">
 <meta property="og:image" content="https://manakai.art/og-school.png">
@@ -137,11 +137,11 @@
 </header>
 
 <main>
-  <span class="kicker">M’AI · поток 03 · оплата участия</span>
+  <span class="kicker">M’AI · оплата участия</span>
   <h1 class="disp" id="ph">Оплата<br>участия</h1>
   <div class="gate-closed" id="gc" hidden>
     <p id="gct">Набор в группу формируется по результатам интервью с Леной. Мест немного, и я хочу быть уверена, что мы подходим друг другу. Напишите в Telegram, чтобы познакомиться — Лена ответит лично.</p>
-    <a class="gc-btn" id="gcb" href="https://t.me/lenamanakai?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%BE%D0%BF%D0%BB%D0%B0%D1%82%D0%B8%D1%82%D1%8C%20%D1%83%D1%87%D0%B0%D1%81%D1%82%D0%B8%D0%B5%20%D0%B2%20M%E2%80%99AI%2C%20%D0%BF%D0%BE%D1%82%D0%BE%D0%BA%2003" target="_blank" rel="noopener">Написать в Telegram</a>
+    <a class="gc-btn" id="gcb" href="https://t.me/lenamanakai?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%BE%D0%BF%D0%BB%D0%B0%D1%82%D0%B8%D1%82%D1%8C%20%D1%83%D1%87%D0%B0%D1%81%D1%82%D0%B8%D0%B5%20%D0%B2%20M%E2%80%99AI" target="_blank" rel="noopener">Написать в Telegram</a>
     <form class="gc-code" id="gcf" autocomplete="off">
       <label for="gcc">Есть промокод</label>
       <div><input id="gcc" type="text" autocapitalize="characters" spellcheck="false" placeholder="Промокод"><button type="submit">Открыть</button></div>
@@ -178,7 +178,7 @@
       </div>
 
       <dl class="facts">
-        <div><dt>Услуга</dt><span class="v">Участие в онлайн-курсе M’AI (AI с Манакай), поток 03</span></div>
+        <div><dt>Услуга</dt><span class="v">Участие в онлайн-курсе M’AI (AI с Манакай)</span></div>
         <div><dt>Исполнитель</dt><span class="v">ИП Сарапульцева Елена Борисовна</span></div>
         <div><dt>Старт</dt><span class="v">Осень 2026</span></div>
         <div><dt>Формат</dt><span class="v">Онлайн, группа до 10 человек, занятия ведёт Лена Манакай</span></div>
@@ -277,7 +277,7 @@
       radios.forEach(function(r){ var l=r.closest(".tariff"); l.hidden = r.value!=="booking"; r.checked = r.value==="booking"; });
       var b=radios.filter(function(r){ return r.value==="booking"; })[0];
       if(b && info && info.bookingPrice){ b.dataset.price=info.bookingPrice; }
-      document.querySelector("main .kicker").textContent="M’AI · поток 03 · бронь места";
+      document.querySelector("main .kicker").textContent="M’AI · бронь места";
       ph.innerHTML="Бронь<br>места";
       document.getElementById("promo").hidden=true; document.getElementById("promo").style.display="none";
       apply();
@@ -286,13 +286,13 @@
   }
   if(qs.get("paid")){
     var ord=(qs.get("o")||"").replace(/[^A-Za-z0-9-]/g,"");
-    document.querySelector("main .kicker").textContent="M’AI · поток 03"+(ord?" · заказ № "+ord:"");
+    document.querySelector("main .kicker").textContent="M’AI"+(ord?" · заказ № "+ord:"");
     closeView(BOOKING?"Место<br>забронировано":"Добро пожаловать<br>в M’AI",
       (BOOKING
         ? "Бронь оплачена, электронный чек придёт отдельным письмом. Место за вами. В течение двух рабочих дней я напишу вам в Telegram или на почту: расскажу о старте потока и о том, как оплатить остаток. "
         : "Оплата прошла, электронный чек придёт отдельным письмом. В течение двух рабочих дней я напишу вам в Telegram или на почту: расскажу о старте потока и пришлю всё необходимое. ")+
-      "Если хотите раньше — напишите мне, в рабочее время я всегда на связи", false);
-    gcb.href="https://t.me/lenamanakai?text="+encodeURIComponent("Здравствуйте! Я оплатил(а) "+(BOOKING?"бронь места":"участие")+" в M’AI, поток 03"+(ord?", заказ № "+ord:""));
+      "Если хотите раньше — напишите мне, в рабочее время я всегда на связи. Письмо с подтверждением придёт на почту — если его нет во входящих, проверьте папку «Спам»", false);
+    gcb.href="https://t.me/lenamanakai?text="+encodeURIComponent("Здравствуйте! Я оплатил(а) "+(BOOKING?"бронь места":"участие")+" в M’AI"+(ord?", заказ № "+ord:""));
     return;
   }
   if(qs.get("fail")){ closeView("Не получилось<br>оплатить", "Можно попробовать ещё раз по той же ссылке или написать в Telegram", false); return; }
