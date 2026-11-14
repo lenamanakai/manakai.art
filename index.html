@@ -79,7 +79,8 @@
 
   /* ——— 01 showreel ——— */
   .reel{position:relative;height:100svh;min-height:520px;background:var(--well);overflow:hidden;}
-  .reel video{width:100%;height:100%;object-fit:cover;}
+  .reel video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;}
+  .reel video.front{opacity:1;z-index:1;}
   .reel .sig{position:absolute;left:var(--g);bottom:calc(var(--g) - 4px);color:rgba(255,255,255,.85);}
   /* на телефоне горизонтальный кадр показывается целиком, а не режется в вертикаль */
   @media (max-width:700px){
@@ -283,7 +284,8 @@
 
 <!-- 01 · SHOWREEL -->
 <section class="reel" id="top" data-snd>
-  <video src="a/showreel.mp4?v=1" poster="a/showreel.jpg" autoplay muted loop playsinline preload="metadata"></video>
+  <video class="front" src="a/showreel.mp4?v=1" poster="a/showreel.jpg" autoplay muted playsinline preload="auto"></video>
+  <video muted playsinline preload="none" data-src="a/showreel.mp4?v=1"></video>
 </section>
 
 <!-- 02 · INTRODUCTION -->
@@ -558,14 +560,15 @@
   }
   function silence(){
     if (!sounding) return;
-    var v = sounding.querySelector("video");
+    var v = vidOf(sounding);
     if (v) v.muted = true;
     sounding.classList.remove("sounding");
     label(sounding, false);
     sounding = null;
   }
+  function vidOf(box){ return box._active || box.querySelector("video"); }
   function voice(box){
-    var v = box.querySelector("video"); if(!v) return;
+    var v = vidOf(box); if(!v) return;
     if (sounding === box){ silence(); return; }
     silence();
     if (v.preload === "none") v.preload = "auto";
@@ -588,6 +591,15 @@
       if (e.key === "Enter" || e.key === " "){ e.preventDefault(); voice(box); }
     });
   });
+  /* ушёл с экрана — звук выключается сам */
+  if ("IntersectionObserver" in window){
+    var sio = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if (e.target === sounding && e.intersectionRatio < 0.2) silence();
+      });
+    },{threshold:[0,0.2,0.5]});
+    soundBoxes.forEach(function(box){ sio.observe(box); });
+  }
   shots.forEach(function(s){ s.removeAttribute("href"); s.setAttribute("role","button"); s.setAttribute("tabindex","0"); });
 
   /* наведение на десктопе — беззвучный предпросмотр */
@@ -622,6 +634,45 @@
     },{threshold:[0,.25,.5,.75,1]});
     shots.forEach(function(s){ io.observe(s); });
   }
+
+  /* ——— шоурил: бесшовный повтор — два одинаковых ролика сменяют друг друга без перемотки ——— */
+  (function(){
+    var reel=document.getElementById("top"); if(!reel) return;
+    var vs=reel.querySelectorAll("video"); if(vs.length<2) return;
+    var a=vs[0], b=vs[1], cur=a, nxt=b, raf=0, ready=false;
+    reel._active=a;
+    function prime(){
+      if (ready) return; ready=true;
+      nxt.src=nxt.getAttribute("data-src"); nxt.preload="auto"; nxt.load();
+    }
+    function swap(){
+      cancelAnimationFrame(raf);
+      var old=cur; cur=nxt; nxt=old;
+      cur.muted = (sounding!==reel); if(!cur.muted) cur.volume=1;
+      cur.classList.add("front"); old.classList.remove("front");
+      reel._active=cur;
+      var p=cur.play(); if(p&&p.catch) p.catch(function(){});
+      old.muted=true; old.pause();
+      try{ old.currentTime=0; }catch(e){}
+      watch();
+    }
+    function watch(){
+      cancelAnimationFrame(raf);
+      (function tick(){
+        if (cur.currentTime>Math.min(3,(cur.duration||9)/3)) prime();
+        if (ready && cur.duration && nxt.readyState>=2 && cur.currentTime>=cur.duration-0.06){ swap(); return; }
+        raf=requestAnimationFrame(tick);
+      })();
+    }
+    [a,b].forEach(function(v){
+      v.addEventListener("ended", function(){
+        if (v!==cur) return;
+        if (ready && nxt.readyState>=2) swap();
+        else { try{ v.currentTime=0; }catch(e){} v.play().catch(function(){}); }
+      });
+    });
+    watch();
+  })();
 
   /* ——— шапка: белая над шоурилом, тёмная дальше ——— */
   var hd=document.getElementById("hd"), reel=document.getElementById("top");
